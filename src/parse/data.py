@@ -55,8 +55,7 @@ class Article:
         Returns:
             List[str]: list of headers
         """
-
-        return process_headers(self.parsed_html.find_all(re.compile("^h[1-6]$")))
+        return [h.text for h in self.parsed_html.find_all(re.compile("^h[1-6]$"))]
 
     def get_sections(self) -> List[str]:
         """
@@ -64,4 +63,4 @@ class Article:
         Returns:
             List[str]: list of section names
         """
-        return to_printable(self.parsed_html.find_all("section"), printtype="gettext")
+        return [l.get_text() for l in self.parsed_html.find_all("section")]
