@@ -47,13 +47,13 @@ class HTMLDump:
         return self.read_dump_local(filepath=self.file_path, max_article=self.max_article)
 
     def read_dump_local(
-            self, filepath: str, max_article: int = 100, preference: str = "html"
+            self, filepath: str, max_article: int = -1, preference: str = "html"
     ) -> Iterator[List[Any]]:
         """
         Reads a local dump file and returns an iterator of the rows.
         Args:
             filepath (str): path to the dump file
-            max_article (int, optional): maximum number of articles to return. Defaults to 100.
+            max_article (int, optional): maximum number of articles to return. Defaults to -1, which means we will iterate over the entire dump file.
             preference (str, optional): preference of the dump file. Defaults to "html".
         Returns:
             Iterator[List[Any]]: iterator of the rows
