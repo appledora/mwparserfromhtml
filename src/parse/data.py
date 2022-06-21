@@ -22,6 +22,7 @@ class Article:
         self.raw_html = html
         self.parsed_html = BeautifulSoup(html, "html.parser")
         self.title = self.parsed_html.title.text
+        self.address = self.parsed_html.find("link", {"rel":"dc:isVersionOf"})["href"]
         self.size = sys.getsizeof(html)
 
     def __str__(self):
@@ -64,3 +65,14 @@ class Article:
             List[str]: list of section names
         """
         return [l.get_text() for l in self.parsed_html.find_all("section")]
+
+    def get_wikilinks(self) -> List[str]:
+        """
+        extract wikilinks from a BeautifulSoup object or Parsed Html
+        Returns:
+            List[str]: list of wikilinks
+        """
+        tag_name = "a"
+        attr_dict = {"rel" : "mw:WikiLink"}
+        wikilinks = self.parsed_html.find_all(tag_name, attrs=attr_dict)
+        return wikilinks
