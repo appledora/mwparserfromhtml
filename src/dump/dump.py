@@ -13,7 +13,7 @@ PathObject = Union[str, Path]
 
 class HTMLDump:
     """
-    Class file to create instances if Wikimedia Enterprise HTML Dumps
+    Class file to create instances of Wikimedia Enterprise HTML Dumps
     """
 
     def __init__(self, filepath: str, encoding: Optional[str] = "utf-8", max_article: int = 100) -> None:
