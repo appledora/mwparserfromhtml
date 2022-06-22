@@ -4,9 +4,9 @@ from typing import List
 
 from bs4 import BeautifulSoup
 
-from .utils import is_comment, process_headers, to_printable
-
-
+from .utils import is_comment
+from .const import WIKILINK
+from .elements import Wikilink
 class Article:
     """
     Class file to create instance of a Wikipedia article from the dump
@@ -66,13 +66,13 @@ class Article:
         """
         return [l.get_text() for l in self.parsed_html.find_all("section")]
 
-    def get_wikilinks(self) -> List[str]:
+    def get_wikilinks(self) -> List[Wikilink]:
         """
         extract wikilinks from a BeautifulSoup object or Parsed Html
         Returns:
             List[str]: list of wikilinks
         """
-        tag_name = "a"
-        attr_dict = {"rel" : "mw:WikiLink"}
-        wikilinks = self.parsed_html.find_all(tag_name, attrs=attr_dict)
-        return wikilinks
+    
+        wikilinks = self.parsed_html.find_all(WIKILINK["tag"], attrs=WIKILINK["attribute"])
+        return [Wikilink(w) for w in wikilinks]           
+
