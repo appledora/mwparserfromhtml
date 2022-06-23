@@ -11,7 +11,7 @@ class Elements:
         return f"{self.name} (value = {self.value} and types =  {self.type})"
 
     def get_value(self):
-        return self.value
+        return self.value.strip()
 
     
 
@@ -32,8 +32,8 @@ class Wikilink(Elements):
         if html_string.has_attr("about"):  # transclusion
             if "mwt" in html_string["about"]:
                 self.type.append("3")
-        if not any(item in self.type for item in ["2", "3"]):
+        if not any(type in self.type for type in ["2", "3"]):
             self.type.append("1")  # normal link
         
     def get_type(self): ## but i also don't want to rewrite this method for multiple subclasses. What could be a work around? 
-        return [WIKILINK["type"][item] for item in self.type]
+        return [WIKILINK["type"][type] for type in self.type]
