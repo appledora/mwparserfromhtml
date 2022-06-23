@@ -20,8 +20,8 @@ class Wikilink(Elements):
     def __init__(self, html_string):
         super().__init__("WIKILINK", html_string)
         self.type_mapping = WIKILINK["type"]
-        self.disambiguation = None 
-        self.redirect = None
+        self.disambiguation = False 
+        self.redirect = False
         if html_string.has_attr("class"):
             if "new" in html_string["class"]:  # redlink
                 self.type.append("2")
