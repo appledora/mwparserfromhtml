@@ -73,7 +73,6 @@ class Article:
             List[str]: list of wikilinks
         """
     
-        # wikilinks = self.parsed_html.find_all(WIKILINK["tag"], attrs=WIKILINK["attribute"])
-        wikilinks = soup.find_all(WIKILINK["tag"], attrs=WIKILINK["attribute"])
+        wikilinks = self.parsed_html.find_all(WIKILINK["tag"], attrs=WIKILINK["attribute"])
         return [Wikilink(w) for w in wikilinks]           
 
