@@ -66,13 +66,14 @@ class Article:
         """
         return [l.get_text() for l in self.parsed_html.find_all("section")]
 
-    def get_wikilinks(self) -> List[Wikilink]:
+    def get_wikilinks(self, soup) -> List[Wikilink]:
         """
         extract wikilinks from a BeautifulSoup object or Parsed Html
         Returns:
             List[str]: list of wikilinks
         """
     
-        wikilinks = self.parsed_html.find_all(WIKILINK["tag"], attrs=WIKILINK["attribute"])
+        # wikilinks = self.parsed_html.find_all(WIKILINK["tag"], attrs=WIKILINK["attribute"])
+        wikilinks = soup.find_all(WIKILINK["tag"], attrs=WIKILINK["attribute"])
         return [Wikilink(w) for w in wikilinks]           
 
