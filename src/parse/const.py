@@ -1,3 +1,5 @@
+# Right now, keeping this file as is. Might help during future extensions and testing. 
+
 WIKILINK = {
     "name" : "wikilink",
     "tag": "a",
