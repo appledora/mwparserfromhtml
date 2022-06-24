@@ -22,6 +22,7 @@ class Wikilink(Elements):
         self.redlink = False
         self.transclusion = False
         self.standard = False
+        self.internal = False
         if html_string.has_attr("class"):
             if "new" in html_string["class"]:  # redlink
                 self.redlink = True
@@ -29,12 +30,13 @@ class Wikilink(Elements):
                 self.disambiguation = True
             if "mw-redirect" in html_string["class"]:  # redirect
                 self.redirect = True
+            if "extiw" in html_string["class"]:
+                self.internal = True
         if html_string.has_attr("about"):  # transclusion
             if "mwt" in html_string["about"]:
                 self.transclusion = True
-        check = self.redlink and self.disambiguation and self.redirect and self.transclusion
-        # we are defining standard links as those, that are not redlinks, redirects, disambiguations or transclusions
-        if not check:
+        # we are defining standard links as those, that are not redlinks, disambiguations, interwiki or transclusions
+        if not self.redlink and not self.disambiguation and not self.transclusion and not self.internal:
             self.standard = True # normal link
         
 

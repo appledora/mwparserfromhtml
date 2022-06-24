@@ -72,7 +72,8 @@ class Article:
         Returns:
             List[str]: list of wikilinks
         """
-    
-        wikilinks = self.parsed_html.find_all(WIKILINK["tag"], attrs=WIKILINK["attribute"])
+        tag = "a"
+        wikilinks = self.parsed_html.find_all(tag, attrs= {"rel": re.compile("mw:WikiLink")})
+        print(f"wikilinks = {len(wikilinks)}")
         return [Wikilink(w) for w in wikilinks]           
 
