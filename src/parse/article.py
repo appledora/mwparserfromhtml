@@ -44,7 +44,7 @@ class Article:
 
     def get_comments(self) -> List[str]:
         """
-        extract the comments from a BeautifulSoup object or Parsed Html
+        extract the comments from a BeautifulSoup object.
         Returns:
             List[str]: list of comments
         """
@@ -52,7 +52,7 @@ class Article:
 
     def get_headers(self) -> List[str]:
         """
-        extract the headers from a BeautifulSoup object or Parsed Html
+        extract the headers from a BeautifulSoup object.
         Returns:
             List[str]: list of headers
         """
@@ -60,7 +60,7 @@ class Article:
 
     def get_sections(self) -> List[str]:
         """
-        extract the article sections from a BeautifulSoup object or Parsed Html
+        extract the article sections from a BeautifulSoup object.
         Returns:
             List[str]: list of section names
         """
@@ -68,9 +68,9 @@ class Article:
 
     def get_wikilinks(self, soup) -> List[Wikilink]:
         """
-        extract wikilinks from a BeautifulSoup object or Parsed Html
+        extract wikilinks from a BeautifulSoup object.
         Returns:
-            List[str]: list of wikilinks
+            List[Wikilink]: list of wikilinks
         """
         tag = "a"
         wikilinks = self.parsed_html.find_all(tag, attrs= {"rel": re.compile("mw:WikiLink")})
