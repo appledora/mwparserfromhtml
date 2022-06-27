@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any, Iterator, List, Optional, Union
 
 sys.path.append(".")
-from parse.data import Article
+from parse.article import Article
 
 PathObject = Union[str, Path]
 
