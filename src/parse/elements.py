@@ -1,6 +1,3 @@
-from .const import WIKILINK
-
-
 class Elements:
     def __init__(self, html_string):
         self.name = self.__class__.__name__
