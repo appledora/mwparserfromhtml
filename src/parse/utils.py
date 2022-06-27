@@ -167,3 +167,6 @@ def process_headers(header_list: List[str]) -> List[str]:
     Processes the headers of the HTML file and returns a list of headers
     """
     return [h.text for h in header_list]
+
+def normalize_link(self, link):
+    return link.strip().replace("_", " ")
