@@ -28,7 +28,7 @@ class Wikilink(Element):
     def __init__(self, html_string):
         """
         Args:
-            html_string: a BeautifulSoup Tag object
+            html_string: an HTML string or a BeautifulSoup Tag object.
         """
         super().__init__( html_string)
         self.value = html_string["title"]
@@ -66,7 +66,7 @@ class ExternalLink(Element) :
     def __init__(self, html_string):
         """
         Args:
-            html_string: a beautifulsoup Tag object
+            html_string: an HTML string or a BeautifulSoup Tag object.
         """
         super().__init__(html_string)
         self.standard = False
