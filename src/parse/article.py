@@ -79,6 +79,11 @@ class Article:
 
 
     def get_externallinks(self) -> List[ExternalLink] :
+        """
+        extract external links from a BeautifulSoup object.
+        Returns:
+            List[ExternalLink]: list of external links
+        """
         tag = "a"
         externallinks = self.parsed_html.find_all(tag, attrs= {"rel": re.compile("mw:ExtLink")})
         return [ExternalLink(e) for e in externallinks]           

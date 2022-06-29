@@ -1,5 +1,7 @@
-from .utils import normalize_link
 class Element:
+    """
+    Base class to instantiate an wiki element from the HTML
+    """
     def __init__(self, html_string):
         self.name = self.__class__.__name__
         self.value = html_string.get_text().strip() #plain text value of the element
@@ -13,7 +15,21 @@ class Element:
 
 
 class Wikilink(Element):
+    """
+    Instantiates a Wikilink object from HTML string. The Wikilink object contains the following attributes:
+    - value: the value of the wikilink
+    - disambiguation: boolean, True if the wikilink is a disambiguation
+    - redirect: boolean, True if the wikilink is a redirect
+    - redlink: boolean, True if the wikilink is a redlink
+    - transclusion: boolean, True if the wikilink is a transclusion
+    - interwiki: boolean, True if the wikilink is an interwiki link
+    - standard: boolean, True if the wikilink is not a redlink or a disambiguation or a transclusion or an interwiki link
+    """
     def __init__(self, html_string):
+        """
+        Args:
+            html_string: a BeautifulSoup Tag object
+        """
         super().__init__( html_string)
         self.value = html_string["title"]
         self.disambiguation = False 
@@ -40,7 +56,18 @@ class Wikilink(Element):
         
 
 class ExternalLink(Element) :
+    """
+    Instantiates an ExternalLink object from HTML string. The ExternalLink object contains the following attributes:
+    - value: the value of the external link
+    - standard: boolean, True if the external link is not a numbered or named link
+    - numbered: boolean, True if the external link is a numbered link
+    - named: boolean, True if the external link is a named link
+    """
     def __init__(self, html_string):
+        """
+        Args:
+            html_string: a beautifulsoup Tag object
+        """
         super().__init__(html_string)
         self.standard = False
         self.numbered = False
