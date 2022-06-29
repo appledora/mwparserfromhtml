@@ -1,3 +1,4 @@
+from distutils.errors import LinkError
 import re
 import sys
 from typing import List
@@ -6,7 +7,7 @@ from bs4 import BeautifulSoup
 
 from .utils import is_comment
 from .const import WIKILINK
-from .elements import Wikilink
+from .elements import ExternalLink, Wikilink
 class Article:
     """
     Class file to create instance of a Wikipedia article from the dump
@@ -66,7 +67,7 @@ class Article:
         """
         return [l.get_text() for l in self.parsed_html.find_all("section")]
 
-    def get_wikilinks(self, soup) -> List[Wikilink]:
+    def get_wikilinks(self) -> List[Wikilink]:
         """
         extract wikilinks from a BeautifulSoup object.
         Returns:
@@ -76,3 +77,8 @@ class Article:
         wikilinks = self.parsed_html.find_all(tag, attrs= {"rel": re.compile("mw:WikiLink")})
         return [Wikilink(w) for w in wikilinks]           
 
+
+    def get_externallinks(self) -> List[ExternalLink] :
+        tag = "a"
+        externallinks = self.parsed_html.find_all(tag, attrs= {"rel": re.compile("mw:ExtLink")})
+        return [ExternalLink(e) for e in externallinks]           

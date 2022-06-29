@@ -1,4 +1,5 @@
-class Elements:
+from .utils import normalize_link
+class Element:
     def __init__(self, html_string):
         self.name = self.__class__.__name__
         self.value = html_string.get_text().strip() #plain text value of the element
@@ -11,9 +12,10 @@ class Elements:
     
 
 
-class Wikilink(Elements):
+class Wikilink(Element):
     def __init__(self, html_string):
         super().__init__( html_string)
+        self.value = html_string["title"]
         self.disambiguation = False 
         self.redirect = False
         self.redlink = False
@@ -37,3 +39,16 @@ class Wikilink(Elements):
             self.standard = True # normal link
         
 
+class ExternalLink(Element) :
+    def __init__(self, html_string):
+        super().__init__(html_string)
+        self.standard = False
+        self.numbered = False
+        self.named = False
+
+        if "text" in html_string["class"]:
+            self.named = True
+        elif "autonumber" in html_string["class"]:
+            self.numbered = True
+        else: 
+            self.standard = True
