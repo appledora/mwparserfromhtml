@@ -72,7 +72,11 @@ class ExternalLink(Element) :
         self.standard = False
         self.numbered = False
         self.named = False
+        self.transclusion = False
 
+        if html_string.has_attr("about"):  # transclusion
+            if "mwt" in html_string["about"]:
+                self.transclusion = True
         if "text" in html_string["class"]:
             self.named = True
         elif "autonumber" in html_string["class"]:
