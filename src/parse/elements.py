@@ -62,7 +62,17 @@ class ExternalLink(Element) :
         else: 
             self.autolinked = True
 class Category(Element):
+    """
+    Instantiates an Category object from an HTML string or a BeautifulSoup Tag object. The Category object contains the following attributes:
+    - value: the normalized link of the category
+    - standard: True if the category is not a transclusion
+    - transclusion: True if the category is a transclusion
+    """
     def __init__(self,html_string):
+        """
+        Args:
+            html_string: an HTML string or a BeautifulSoup Tag object.
+        """
         super().__init__(html_string)
         self.title = title_normalization( html_string["href"])
         self.standard = False 
