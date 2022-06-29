@@ -1,7 +1,5 @@
+from .utils import title_normalization
 class Element:
-    """
-    Base class to instantiate an wiki element from the HTML
-    """
     def __init__(self, html_string):
         self.name = self.__class__.__name__
         self.title = html_string["title"]
@@ -9,17 +7,7 @@ class Element:
     def __str__(self):
         return f"{self.name} (VALUE = {self.title} and PROPS =  {self.__dict__})"
     
-
-
 class Wikilink(Element):
-    """
-    Instantiates a Wikilink object from HTML string. The Wikilink object contains the following attributes:
-    - disambiguation: boolean, True if if the wikilink leads to a disambiguation page
-    - redirect: boolean, True if the wikilink is a redirect
-    - redlink: boolean, True if the wikilink is a redlink
-    - transclusion: boolean, True if the wikilink was transcluded onto the page
-    - interwiki: boolean, True if the wikilink is an interwiki link
-    """
     def __init__(self, html_string):
         """
         Args:
@@ -73,3 +61,15 @@ class ExternalLink(Element) :
             self.numbered = True
         else: 
             self.autolinked = True
+class Category(Element):
+    def __init__(self,html_string):
+        super().__init__(html_string)
+        self.title = title_normalization( html_string["href"])
+        self.standard = False 
+        self.transclusion = False
+
+        #since transclusion is present in different elements, may be this should be a base property? 
+        if html_string.has_attr("about") and "mwt" in html_string["about"]:
+            self.transclusion = True
+        else:
+            self.standard = True
