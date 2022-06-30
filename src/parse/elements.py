@@ -21,7 +21,7 @@ class Wikilink(Element):
     - disambiguation: boolean, True if if the wikilink leads to a disambiguation page
     - redirect: boolean, True if the wikilink is a redirect
     - redlink: boolean, True if the wikilink is a redlink
-    - transclusion: boolean, True if the wikilink is a transclusion
+    - transclusion: boolean, True if the wikilink was transcluded onto the page.
     - interwiki: boolean, True if the wikilink is an interwiki link
     - standard: boolean, True if the wikilink is not a redlink or a disambiguation or a transclusion or an interwiki link
     """
