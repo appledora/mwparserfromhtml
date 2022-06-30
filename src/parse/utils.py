@@ -168,5 +168,5 @@ def process_headers(header_list: List[str]) -> List[str]:
     """
     return [h.text for h in header_list]
 
-def normalize_link(type, link):
+def normalize_link(element_name, link):
     return link.strip().replace("_", " ")
