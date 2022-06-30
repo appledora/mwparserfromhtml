@@ -1,4 +1,3 @@
-from distutils.errors import LinkError
 import re
 import sys
 from typing import List
