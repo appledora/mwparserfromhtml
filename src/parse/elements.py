@@ -48,7 +48,7 @@ class Wikilink(Element):
             if "extiw" in html_string["class"]:
                 self.interwiki = True
         if html_string.has_attr("about"):  # transclusion
-            if "mwt" in html_string["about"]:
+            if html_string["about"].startswith("#mwt"):
                 self.transclusion = True
         # we are defining standard links as those, that are not redlinks, disambiguations, interwiki or transclusions
         if not self.redlink and not self.disambiguation and not self.transclusion and not self.interwiki:
@@ -75,7 +75,7 @@ class ExternalLink(Element) :
         self.transclusion = False
 
         if html_string.has_attr("about"):  # transclusion
-            if "mwt" in html_string["about"]:
+            if html_string["about"].startswith("#mwt"):
                 self.transclusion = True
         if "text" in html_string["class"]:
             self.named = True
