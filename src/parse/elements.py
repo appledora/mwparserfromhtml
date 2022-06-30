@@ -18,7 +18,7 @@ class Wikilink(Element):
     """
     Instantiates a Wikilink object from HTML string. The Wikilink object contains the following attributes:
     - value: the value of the wikilink
-    - disambiguation: boolean, True if the wikilink is a disambiguation
+    - disambiguation: boolean, True if if the wikilink leads to a disambiguation page
     - redirect: boolean, True if the wikilink is a redirect
     - redlink: boolean, True if the wikilink is a redlink
     - transclusion: boolean, True if the wikilink is a transclusion
