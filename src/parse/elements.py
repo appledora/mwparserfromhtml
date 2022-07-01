@@ -5,19 +5,9 @@ class Element:
     def __init__(self, html_string):
         self.name = self.__class__.__name__
         self.title = html_string["title"]
-        self.text = html_string.get_text().strip() #plain text value of the element (if any)
+        self.text = html_string.get_text() #plain text value of the element (if any)
     def __str__(self):
         return f"{self.name} (VALUE = {self.title} and PROPS =  {self.__dict__})"
-
-    def get_text(self):
-        return self.text.strip()
-    
-    def get_name(self):
-        return self.name.strip()
-    
-    def get_title(self):
-        return self.title.strip()
-
     
 
 
