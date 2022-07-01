@@ -83,11 +83,9 @@ class Category(Element):
         """
         super().__init__(html_string)
         self.title = title_normalization( html_string["href"])
-        self.standard = False 
         self.transclusion = False
 
         #since transclusion is present in different elements, may be this should be a base property? 
         if html_string.has_attr("about") and html_string["about"].startswith("#mwt"):
             self.transclusion = True
-        else:
-            self.standard = True
+
