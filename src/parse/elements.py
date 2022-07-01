@@ -17,7 +17,7 @@ class Wikilink(Element):
     - disambiguation: boolean, True if if the wikilink leads to a disambiguation page
     - redirect: boolean, True if the wikilink is a redirect
     - redlink: boolean, True if the wikilink is a redlink
-    - transclusion: boolean, True if the wikilink was transcluded onto the page.
+    - transclusion: boolean, True if the wikilink was transcluded onto the page
     - interwiki: boolean, True if the wikilink is an interwiki link
     """
     def __init__(self, html_string):
@@ -48,9 +48,10 @@ class Wikilink(Element):
 class ExternalLink(Element) :
     """
     Instantiates an ExternalLink object from HTML string. The ExternalLink object contains the following attributes:
-    - standard: boolean, True if the external link is not a numbered or named link
+    - autolinked: boolean, True if the external link is not a numbered or a named link
     - numbered: boolean, True if the external link is a numbered link
     - named: boolean, True if the external link is a named link
+    - transclusion: boolean, True if the wikilink was transcluded onto the page
     """
     def __init__(self, html_string):
         """
