@@ -8,6 +8,14 @@ class Element:
         return f"{self.name} (VALUE = {self.title} and PROPS =  {self.__dict__})"
     
 class Wikilink(Element):
+    """
+    Instantiates a Wikilink object from HTML string. The Wikilink object contains the following attributes:
+    - disambiguation: boolean, True if if the wikilink leads to a disambiguation page
+    - redirect: boolean, True if the wikilink is a redirect
+    - redlink: boolean, True if the wikilink is a redlink
+    - transclusion: boolean, True if the wikilink was transcluded onto the page
+    - interwiki: boolean, True if the wikilink is an interwiki link
+    """
     def __init__(self, html_string):
         """
         Args:
@@ -31,6 +39,7 @@ class Wikilink(Element):
         if html_string.has_attr("about"):  # transclusion
             if html_string["about"].startswith("#mwt"):
                 self.transclusion = True
+
         
 
 class ExternalLink(Element) :
