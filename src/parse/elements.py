@@ -1,5 +1,9 @@
 from .utils import title_normalization
 class Element:
+    """
+    Base class to instantiate a wiki element from the HTML
+    """
+
     def __init__(self, html_string):
         self.name = self.__class__.__name__
         self.title = html_string["title"]
@@ -72,9 +76,9 @@ class ExternalLink(Element) :
             self.autolinked = True
 class Category(Element):
     """
-    Instantiates an Category object from an HTML string or a BeautifulSoup Tag object. The Category object contains the following attributes:
+    Instantiates a Category object from an HTML string or a BeautifulSoup Tag object. The Category object contains the following attributes:
     - title: the title of the Category normalized from the link
-    - transclusion: True if the category is a transclusion
+    - transclusion: True if the Category was transcluded onto the page
     """
     def __init__(self,html_string):
         """
