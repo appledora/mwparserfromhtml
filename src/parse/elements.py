@@ -4,12 +4,19 @@ class Element:
     """
     def __init__(self, html_string):
         self.name = self.__class__.__name__
+        self.title = html_string["title"]
         self.text = html_string.get_text().strip() #plain text value of the element (if any)
     def __str__(self):
-        return f"{self.name} (VALUE = {self.value} and PROPS =  {self.__dict__})"
+        return f"{self.name} (VALUE = {self.title} and PROPS =  {self.__dict__})"
 
-    def get_value(self):
-        return self.value.strip()
+    def get_text(self):
+        return self.text.strip()
+    
+    def get_name(self):
+        return self.name.strip()
+    
+    def get_title(self):
+        return self.title.strip()
 
     
 
@@ -30,7 +37,6 @@ class Wikilink(Element):
             html_string: an HTML string or a BeautifulSoup Tag object.
         """
         super().__init__( html_string)
-        self.title = html_string["title"]
         self.disambiguation = False 
         self.redirect = False
         self.redlink = False
@@ -64,7 +70,6 @@ class ExternalLink(Element) :
             html_string: an HTML string or a BeautifulSoup Tag object.
         """
         super().__init__(html_string)
-        self.title = html_string["title"]
         self.autolinked = False
         self.numbered = False
         self.named = False
