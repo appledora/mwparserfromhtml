@@ -64,8 +64,7 @@ class ExternalLink(Element) :
 class Category(Element):
     """
     Instantiates an Category object from an HTML string or a BeautifulSoup Tag object. The Category object contains the following attributes:
-    - value: the normalized link of the category
-    - standard: True if the category is not a transclusion
+    - title: the title of the Category normalized from the link
     - transclusion: True if the category is a transclusion
     """
     def __init__(self,html_string):
@@ -79,7 +78,7 @@ class Category(Element):
         self.transclusion = False
 
         #since transclusion is present in different elements, may be this should be a base property? 
-        if html_string.has_attr("about") and "mwt" in html_string["about"]:
+        if html_string.has_attr("about") and html_string["about"].startswith("#mwt"):
             self.transclusion = True
         else:
             self.standard = True

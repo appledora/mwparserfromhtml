@@ -1,7 +1,5 @@
 import re
-from typing import List, Any
 
-import bs4
 from bs4 import Comment  # for parsing the HTML
 
 # regex for checking if a string is a valid URL
@@ -85,5 +83,9 @@ def htmlDecode(s, codes=htmlCodesReversed):
 
 
 
-def title_normalization(element_name, link):
+def title_normalization(link):
+    try:
+        link = link.split(":", 1)[1]
+    except Exception as e:
+        return link.strip().replace("_", " ")
     return link.strip().replace("_", " ")
