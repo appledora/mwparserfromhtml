@@ -1,11 +1,7 @@
 import re
 import sys
 from typing import List
-
 from bs4 import BeautifulSoup
-
-from .utils import is_comment
-from .const import WIKILINK
 from .elements import ExternalLink, Wikilink
 class Article:
     """
