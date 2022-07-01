@@ -23,7 +23,6 @@ class Wikilink(Element):
     - redlink: boolean, True if the wikilink is a redlink
     - transclusion: boolean, True if the wikilink was transcluded onto the page.
     - interwiki: boolean, True if the wikilink is an interwiki link
-    - standard: boolean, True if the wikilink is not a redlink or a disambiguation or a transclusion or an interwiki link
     """
     def __init__(self, html_string):
         """
@@ -50,9 +49,6 @@ class Wikilink(Element):
         if html_string.has_attr("about"):  # transclusion
             if html_string["about"].startswith("#mwt"):
                 self.transclusion = True
-        # we are defining standard links as those, that are not redlinks, disambiguations, interwiki or transclusions
-        if not self.redlink and not self.disambiguation and not self.transclusion and not self.interwiki:
-            self.standard = True # normal link
         
 
 class ExternalLink(Element) :
@@ -69,7 +65,7 @@ class ExternalLink(Element) :
             html_string: an HTML string or a BeautifulSoup Tag object.
         """
         super().__init__(html_string)
-        self.standard = False
+        self.autolinked = False
         self.numbered = False
         self.named = False
         self.transclusion = False
@@ -82,4 +78,4 @@ class ExternalLink(Element) :
         elif "autonumber" in html_string["class"]:
             self.numbered = True
         else: 
-            self.standard = True
+            self.autolinked = True
