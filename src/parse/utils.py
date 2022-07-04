@@ -85,7 +85,8 @@ def htmlDecode(s, codes=htmlCodesReversed):
 
 def title_normalization(link):
     try:
+        #strip everything before the first ":" as a naive way to strip namespace information i.e: "Category" in this case
         link = link.split(":", 1)[1]
     except Exception as e:
-        return link.strip().replace("_", " ")
+        pass
     return link.strip().replace("_", " ")
