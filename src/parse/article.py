@@ -4,7 +4,7 @@ from typing import List
 from bs4 import BeautifulSoup
 
 from .utils import is_comment
-from .elements import Category, Wikilink, Category
+from .elements import Wikilink, Category
 class Article:
     """
     Class file to create instance of a Wikipedia article from the dump
