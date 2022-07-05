@@ -3,6 +3,7 @@ from bs4 import Comment  # for parsing the HTML
 def is_comment(element):
     return isinstance(element, Comment)
 
+
 def nested_value_extract(key, var):
     """
     function to extract the value of all occurances of a specific key from a nested dictionary
@@ -23,7 +24,6 @@ def nested_value_extract(key, var):
                             yield result
 
 
-
 def flatten_list(A):
     rt = []
     for i in A:
@@ -33,7 +33,6 @@ def flatten_list(A):
             if i.strip() != "":
                 rt.append(i)
     return rt
-
 
 
 def title_normalization(link):
@@ -56,13 +55,13 @@ def get_namespaces():
 
     def get_wikipedia_sites():
         session = requests.Session()
-        base_url = 'https://meta.wikimedia.org/w/api.php'
+        base_url = "https://meta.wikimedia.org/w/api.php"
         params = {
             "action": "sitematrix",
-            "smlangprop": '|'.join(['code', 'site']),
-            "smsiteprop": '|'.join(['url']),
+            "smlangprop": "|".join(["code", "site"]),
+            "smsiteprop": "|".join(["url"]),
             "format": "json",
-            "formatversion": "2"
+            "formatversion": "2",
         }
         result = session.get(url=base_url, params=params)
         result = result.json()
@@ -73,14 +72,14 @@ def get_namespaces():
         # (...): match wiki language and keep
         # (?=...): match .wikipedia.org but don't keep
         # $ end of string
-        wikipedia_pat = re.compile(r'(?<=^https://)([a-z\-]*)(?=.wikipedia.org$)')
-        if 'sitematrix' in result:
-            for lang in result['sitematrix']:
+        wikipedia_pat = re.compile(r"(?<=^https://)([a-z\-]*)(?=.wikipedia.org$)")
+        if "sitematrix" in result:
+            for lang in result["sitematrix"]:
                 try:
                     int(lang)  # weirdly, wikis are keyed as numbers in the results
-                    for wiki in result['sitematrix'][lang].get('site', []):
-                        if 'closed' not in wiki:
-                            is_wikipedia = wikipedia_pat.search(wiki['url'])
+                    for wiki in result["sitematrix"][lang].get("site", []):
+                        if "closed" not in wiki:
+                            is_wikipedia = wikipedia_pat.search(wiki["url"])
                             if is_wikipedia:
                                 wiki_languages.add(is_wikipedia.group())
                                 break
@@ -102,21 +101,21 @@ def get_namespaces():
             "meta": "siteinfo",
             "siprop": "namespaces",
             "format": "json",
-            "formatversion": "2"
+            "formatversion": "2",
         }
         result = session.get(url=base_url, params=params)
         result = result.json()
 
         namespaces = {}
-        if 'namespaces' in result.get('query', {}):
-            for ns in result['query']['namespaces'].values():
+        if "namespaces" in result.get("query", {}):
+            for ns in result["query"]["namespaces"].values():
                 # skip main namespace -- no prefixes
-                if ns.get('name'):
-                    namespaces[ns['name']] = ns['id']
+                if ns.get("name"):
+                    namespaces[ns["name"]] = ns["id"]
         return namespaces
 
     wiki_languages = get_wikipedia_sites()
-    print(f'{len(wiki_languages)} languages: {wiki_languages}')
+    print(f"{len(wiki_languages)} languages: {wiki_languages}")
     NAMESPACES = {}
     for lang in wiki_languages:
         NAMESPACES[lang] = get_namespace_prefix_map(lang)

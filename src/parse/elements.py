@@ -1,4 +1,6 @@
 from .utils import title_normalization
+
+
 class Element:
     """
     Base class to instantiate a wiki element from the HTML
@@ -16,7 +18,8 @@ class Element:
             self.text = ""
     def __str__(self):
         return f"{self.name} (VALUE = {self.title} and PROPS =  {self.__dict__})"
-    
+
+
 class Wikilink(Element):
     """
     Instantiates a Wikilink object from HTML string. The Wikilink object contains the following attributes:
@@ -26,13 +29,14 @@ class Wikilink(Element):
     - transclusion: boolean, True if the wikilink was transcluded onto the page
     - interwiki: boolean, True if the wikilink is an interwiki link
     """
+
     def __init__(self, html_string):
         """
         Args:
             html_string: an HTML string or a BeautifulSoup Tag object.
         """
-        super().__init__( html_string)
-        self.disambiguation = False 
+        super().__init__(html_string)
+        self.disambiguation = False
         self.redirect = False
         self.redlink = False
         self.transclusion = False
@@ -50,9 +54,8 @@ class Wikilink(Element):
             if html_string["about"].startswith("#mwt"):
                 self.transclusion = True
 
-        
 
-class ExternalLink(Element) :
+class ExternalLink(Element):
     """
     Instantiates an ExternalLink object from HTML string. The ExternalLink object contains the following attributes:
     - autolinked: boolean, True if the external link is not a numbered or a named link
@@ -60,6 +63,7 @@ class ExternalLink(Element) :
     - named: boolean, True if the external link is a named link
     - transclusion: boolean, True if the wikilink was transcluded onto the page
     """
+
     def __init__(self, html_string):
         """
         Args:
@@ -78,24 +82,27 @@ class ExternalLink(Element) :
             self.named = True
         elif "autonumber" in html_string["class"]:
             self.numbered = True
-        else: 
+        else:
             self.autolinked = True
+
+
 class Category(Element):
     """
     Instantiates a Category object from an HTML string or a BeautifulSoup Tag object. The Category object contains the following attributes:
     - title: the title of the Category normalized from the link
     - transclusion: True if the Category was transcluded onto the page
     """
-    def __init__(self,html_string):
+
+    def __init__(self, html_string):
         """
         Args:
             html_string: an HTML string or a BeautifulSoup Tag object.
         """
         super().__init__(html_string)
-        self.title = title_normalization( html_string["href"])
+        self.title = title_normalization(html_string["href"])
         self.transclusion = False
 
-        #since transclusion is present in different elements, may be this should be a base property? 
+        # since transclusion is present in different elements, may be this should be a base property?
         if html_string.has_attr("about") and html_string["about"].startswith("#mwt"):
             self.transclusion = True
 

@@ -1,5 +1,5 @@
 import re
-import ast 
+import ast
 import sys
 from typing import List
 from bs4 import BeautifulSoup
@@ -70,9 +70,10 @@ class Article:
             List[Wikilink]: list of wikilinks
         """
         tag = "a"
-        wikilinks = self.parsed_html.find_all(tag, attrs= {"rel": re.compile("mw:WikiLink")})
-        return [Wikilink(w) for w in wikilinks]         
-
+        wikilinks = self.parsed_html.find_all(
+            tag, attrs={"rel": re.compile("mw:WikiLink")}
+        )
+        return [Wikilink(w) for w in wikilinks]
 
     def get_categories(self) -> List[Category]:
         """
@@ -81,7 +82,9 @@ class Article:
             List[Category]: list of categories
         """
         tag = "link"
-        categories = self.parsed_html.find_all(tag, attrs= {"rel": "mw:PageProp/Category"})
+        categories = self.parsed_html.find_all(
+            tag, attrs={"rel": "mw:PageProp/Category"}
+        )
         return [Category(c) for c in categories]
         wikilinks = self.parsed_html.find_all(
             tag, attrs={"rel": re.compile("mw:WikiLink")}
