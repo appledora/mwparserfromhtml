@@ -1,7 +1,9 @@
+from .utils import title_normalization
 class Element:
     """
-    Base class to instantiate an wiki element from the HTML
+    Base class to instantiate a wiki element from the HTML
     """
+
     def __init__(self, html_string):
         self.name = self.__class__.__name__
         self.title = html_string["title"]
@@ -9,8 +11,6 @@ class Element:
     def __str__(self):
         return f"{self.name} (VALUE = {self.title} and PROPS =  {self.__dict__})"
     
-
-
 class Wikilink(Element):
     """
     Instantiates a Wikilink object from HTML string. The Wikilink object contains the following attributes:
@@ -43,6 +43,7 @@ class Wikilink(Element):
         if html_string.has_attr("about"):  # transclusion
             if html_string["about"].startswith("#mwt"):
                 self.transclusion = True
+
         
 
 class ExternalLink(Element) :
@@ -73,3 +74,22 @@ class ExternalLink(Element) :
             self.numbered = True
         else: 
             self.autolinked = True
+class Category(Element):
+    """
+    Instantiates a Category object from an HTML string or a BeautifulSoup Tag object. The Category object contains the following attributes:
+    - title: the title of the Category normalized from the link
+    - transclusion: True if the Category was transcluded onto the page
+    """
+    def __init__(self,html_string):
+        """
+        Args:
+            html_string: an HTML string or a BeautifulSoup Tag object.
+        """
+        super().__init__(html_string)
+        self.title = title_normalization( html_string["href"])
+        self.transclusion = False
+
+        #since transclusion is present in different elements, may be this should be a base property? 
+        if html_string.has_attr("about") and html_string["about"].startswith("#mwt"):
+            self.transclusion = True
+
