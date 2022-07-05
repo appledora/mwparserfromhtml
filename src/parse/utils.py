@@ -46,3 +46,82 @@ def title_normalization(link):
     except Exception as e:
         pass
     return link.strip().replace("_", " ")
+
+def get_namespaces():
+    """
+    Utility for generating NAMESPACES dictionary found in const.py.
+
+    Not intended to be called from code but to be occasionally run locally and used to manually update NAMESPACES.
+    """
+    import re
+    import requests
+    import time
+
+    def get_wikipedia_sites():
+        session = requests.Session()
+        base_url = 'https://meta.wikimedia.org/w/api.php'
+        params = {
+            "action": "sitematrix",
+            "smlangprop": '|'.join(['code', 'site']),
+            "smsiteprop": '|'.join(['url']),
+            "format": "json",
+            "formatversion": "2"
+        }
+        result = session.get(url=base_url, params=params)
+        result = result.json()
+
+        wiki_languages = set()
+        # ^: start of string
+        # (?<=...): match https:// but don't keep
+        # (...): match wiki language and keep
+        # (?=...): match .wikipedia.org but don't keep
+        # $ end of string
+        wikipedia_pat = re.compile(r'(?<=^https://)([a-z\-]*)(?=.wikipedia.org$)')
+        if 'sitematrix' in result:
+            for lang in result['sitematrix']:
+                try:
+                    int(lang)  # weirdly, wikis are keyed as numbers in the results
+                    for wiki in result['sitematrix'][lang].get('site', []):
+                        if 'closed' not in wiki:
+                            is_wikipedia = wikipedia_pat.search(wiki['url'])
+                            if is_wikipedia:
+                                wiki_languages.add(is_wikipedia.group())
+                                break
+                except ValueError:  # skip count metadata and special wikis
+                    continue
+        return sorted(wiki_languages)
+
+    def get_namespace_prefix_map(lang):
+        """Get official mapping of namespace names to IDs for a wiki -- e.g., Talk:1
+
+        This ignores aliases as the HTML dumps standardize the namespace prefixes on links.
+        NOTE: this data can alternatively be extracted from the dumps:
+        <lang>-<date>-siteinfo-namespaces.json.gz
+        """
+        session = requests.Session()
+        base_url = "https://{0}.wikipedia.org/w/api.php".format(lang)
+        params = {
+            "action": "query",
+            "meta": "siteinfo",
+            "siprop": "namespaces",
+            "format": "json",
+            "formatversion": "2"
+        }
+        result = session.get(url=base_url, params=params)
+        result = result.json()
+
+        namespaces = {}
+        if 'namespaces' in result.get('query', {}):
+            for ns in result['query']['namespaces'].values():
+                # skip main namespace -- no prefixes
+                if ns.get('name'):
+                    namespaces[ns['name']] = ns['id']
+        return namespaces
+
+    wiki_languages = get_wikipedia_sites()
+    print(f'{len(wiki_languages)} languages: {wiki_languages}')
+    NAMESPACES = {}
+    for lang in wiki_languages:
+        NAMESPACES[lang] = get_namespace_prefix_map(lang)
+        time.sleep(0.5)
+    print(NAMESPACES)
