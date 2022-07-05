@@ -6,8 +6,14 @@ class Element:
 
     def __init__(self, html_string):
         self.name = self.__class__.__name__
-        self.title = html_string["title"]
-        self.text = html_string.get_text() #plain text value of the element (if any)
+
+        # this checking here was performed because the `html_string` is usually a string of HTML code, but in case of templates, it is a dictionary. What could be a better way if handling this?
+        if not isinstance(html_string, dict):
+            self.title = html_string["title"] if html_string.has_attr("title") else ""
+            self.text = html_string.get_text() #plain text value of the element (if any)
+        else:
+            self.title = ""
+            self.text = ""
     def __str__(self):
         return f"{self.name} (VALUE = {self.title} and PROPS =  {self.__dict__})"
     
@@ -93,3 +99,17 @@ class Category(Element):
         if html_string.has_attr("about") and html_string["about"].startswith("#mwt"):
             self.transclusion = True
 
+class Template(Element):
+    """
+    Instantiates a Template object from HTML string. The Template object contains the following attributes:
+    - transclusion: boolean, True if the wikilink was transcluded onto the page
+    """
+    def __init__(self, html_string):
+        """
+        Args:
+            html_string: a dictionary containing the HTML attributes of the template
+        """
+        super().__init__(html_string)
+        self.title = html_string["target"]["wt"]
+        self.link = html_string["target"]["href"]
+        self.params = html_string["params"] if "params" in html_string.keys() else ""

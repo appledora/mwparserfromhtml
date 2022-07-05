@@ -1,7 +1,4 @@
-import re
-
 from bs4 import Comment  # for parsing the HTML
-
 
 def is_comment(element):
     return isinstance(element, Comment)
@@ -42,7 +39,6 @@ def flatten_list(A):
 def title_normalization(link):
     try:
         #strip everything before the first ":" as a naive way to strip namespace information i.e: "Category" in this case
-        link = link.split(":", 1)[1]
+        return link.split(":", 1)[1].replace("_", " ")
     except Exception as e:
-        pass
-    return link.strip().replace("_", " ")
+        return link 
