@@ -86,10 +86,7 @@ class Article:
             tag, attrs={"rel": "mw:PageProp/Category"}
         )
         return [Category(c) for c in categories]
-        wikilinks = self.parsed_html.find_all(
-            tag, attrs={"rel": re.compile("mw:WikiLink")}
-        )
-        return [Wikilink(w) for w in wikilinks]
+
 
     def get_externallinks(self) -> List[ExternalLink]:
         """
@@ -109,7 +106,11 @@ class Article:
         Returns:
             List[Template]: list of templates
         """
-        templates = self.parsed_html.find_all(attrs={"data-mw": re.compile("template")})
+        # function to extract template with data-mw attribute that contains dictionary with "parts" key
+        def criterion(tag):
+            return tag.has_attr("data-mw") and "parts" in ast.literal_eval(tag["data-mw"])
+
+        templates = self.parsed_html.findAll(criterion)
         template_values = []
         ## Templates appear inside the "template" key of a nested dictionary, unlike the other elements that can be directly extracted from html attributes. Which is why we have traverse the nested dictionary (may have arbitrary depth) to extract the values of the templates.
         for temp in templates:
@@ -118,8 +119,10 @@ class Article:
                     nested_value_extract("template", ast.literal_eval(temp["data-mw"]))
                 )
                 if len(template_item) != 0:
-                    for item in template_item:
-                        template_values.append(item["target"])
+                    # we have to use a loop because there may be multiple "template" keys in the nested dictionary
+                    for item in template_item: 
+                        template_values.append((temp,item["target"])) #storing both the html string and the template values
             except Exception as e:
                 print(e)
-        return [Template(t) for t in template_values]
+        
+        return [Template(t[0], t[1]) for t in template_values]

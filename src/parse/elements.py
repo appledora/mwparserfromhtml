@@ -8,16 +8,9 @@ class Element:
 
     def __init__(self, html_string):
         self.name = self.__class__.__name__
-
-        # this checking here was performed because the `html_string` is usually a string of HTML code, but in case of templates, it is a dictionary. What could be a better way if handling this?
-        if not isinstance(html_string, dict):
-            self.title = html_string["title"] if html_string.has_attr("title") else ""
-            self.text = (
-                html_string.get_text()
-            )  # plain text value of the element (if any)
-        else:
-            self.title = ""
-            self.text = ""
+        self.html_string = html_string
+        self.title = None
+        self.plaintext = html_string.get_text()
 
     def __str__(self):
         return f"{self.name} (VALUE = {self.title} and PROPS =  {self.__dict__})"
@@ -39,11 +32,14 @@ class Wikilink(Element):
             html_string: an HTML string or a BeautifulSoup Tag object.
         """
         super().__init__(html_string)
+        self.title = html_string["title"] if html_string.has_attr("title") else ""
         self.disambiguation = False
         self.redirect = False
         self.redlink = False
         self.transclusion = False
         self.interwiki = False
+        self.id = None
+
         if html_string.has_attr("class"):
             if "new" in html_string["class"]:  # redlink
                 self.redlink = True
@@ -56,6 +52,7 @@ class Wikilink(Element):
         if html_string.has_attr("about"):  # transclusion
             if html_string["about"].startswith("#mwt"):
                 self.transclusion = True
+                self.id = html_string["about"]
 
 
 class ExternalLink(Element):
@@ -73,14 +70,16 @@ class ExternalLink(Element):
             html_string: an HTML string or a BeautifulSoup Tag object.
         """
         super().__init__(html_string)
+        self.title = html_string["title"] if html_string.has_attr("title") else ""
         self.autolinked = False
         self.numbered = False
         self.named = False
         self.transclusion = False
-
+        self.id = None
         if html_string.has_attr("about"):  # transclusion
             if html_string["about"].startswith("#mwt"):
                 self.transclusion = True
+                self.id = html_string["about"]
         if "text" in html_string["class"]:
             self.named = True
         elif "autonumber" in html_string["class"]:
@@ -104,11 +103,11 @@ class Category(Element):
         super().__init__(html_string)
         self.title = title_normalization(html_string["href"])
         self.transclusion = False
-
+        self.id = None
         # since transclusion is present in different elements, may be this should be a base property?
         if html_string.has_attr("about") and html_string["about"].startswith("#mwt"):
             self.transclusion = True
-
+            self.id = html_string["about"]
 
 class Template(Element):
     """
@@ -116,12 +115,15 @@ class Template(Element):
     - transclusion: boolean, True if the wikilink was transcluded onto the page
     """
 
-    def __init__(self, html_string):
+    def __init__(self, html_string, data_dictionary):
         """
         Args:
-            html_string: a dictionary containing the HTML attributes of the template
+            html_string: an HTML string or a BeautifulSoup Tag object.
+            data_dictionary: a dictionary containing the HTML attributes of the template
         """
         super().__init__(html_string)
-        self.title = html_string["target"]["wt"]
-        self.link = html_string["target"]["href"]
-        self.params = html_string["params"] if "params" in html_string.keys() else ""
+        self.title = data_dictionary["wt"]
+        self.link = data_dictionary["href"]
+        self.id = html_string["about"] if html_string.has_attr("about") else ""
+        
+        
