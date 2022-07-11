@@ -122,3 +122,17 @@ def get_namespaces():
         NAMESPACES[lang] = get_namespace_prefix_map(lang)
         time.sleep(0.5)
     print(NAMESPACES)
+
+def get_id(html_string):
+    """
+    Utility for extracting the id of an element from a HTML string.
+    """
+    return html_string["about"] if html_string.has_attr("about") else None
+
+def check_transclusion(html_string):
+    """
+    Utility for checking if an element is transcluded on the web page.
+    """
+    if html_string.has_attr("about") and html_string["about"].startswith("#mwt"):
+        return True
+    return False
