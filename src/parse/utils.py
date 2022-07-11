@@ -123,7 +123,7 @@ def get_namespaces():
         time.sleep(0.5)
     print(NAMESPACES)
 
-def get_id(html_string):
+def get_tid(html_string):
     """
     Utility for extracting the id of an element from a HTML string.
     """
