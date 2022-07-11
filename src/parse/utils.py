@@ -1,10 +1,9 @@
-import re
-
 from bs4 import Comment  # for parsing the HTML
 
 
 def is_comment(element):
     return isinstance(element, Comment)
+
 
 def nested_value_extract(key, var):
     """
@@ -26,7 +25,6 @@ def nested_value_extract(key, var):
                             yield result
 
 
-
 def flatten_list(A):
     rt = []
     for i in A:
@@ -38,14 +36,12 @@ def flatten_list(A):
     return rt
 
 
-
 def title_normalization(link):
     try:
-        #strip everything before the first ":" as a naive way to strip namespace information i.e: "Category" in this case
-        link = link.split(":", 1)[1]
+        # strip everything before the first ":" as a naive way to strip namespace information i.e: "Category" in this case
+        return link.split(":", 1)[1].replace("_", " ")
     except Exception as e:
-        pass
-    return link.strip().replace("_", " ")
+        return link
 
 def get_namespaces():
     """
@@ -76,14 +72,14 @@ def get_namespaces():
         # (...): match wiki language and keep
         # (?=...): match .wikipedia.org but don't keep
         # $ end of string
-        wikipedia_pat = re.compile(r'(?<=^https://)([a-z\-]*)(?=.wikipedia.org$)')
-        if 'sitematrix' in result:
-            for lang in result['sitematrix']:
+        wikipedia_pat = re.compile(r"(?<=^https://)([a-z\-]*)(?=.wikipedia.org$)")
+        if "sitematrix" in result:
+            for lang in result["sitematrix"]:
                 try:
                     int(lang)  # weirdly, wikis are keyed as numbers in the results
-                    for wiki in result['sitematrix'][lang].get('site', []):
-                        if 'closed' not in wiki:
-                            is_wikipedia = wikipedia_pat.search(wiki['url'])
+                    for wiki in result["sitematrix"][lang].get("site", []):
+                        if "closed" not in wiki:
+                            is_wikipedia = wikipedia_pat.search(wiki["url"])
                             if is_wikipedia:
                                 wiki_languages.add(is_wikipedia.group())
                                 break
@@ -111,17 +107,31 @@ def get_namespaces():
         result = result.json()
 
         namespaces = {}
-        if 'namespaces' in result.get('query', {}):
-            for ns in result['query']['namespaces'].values():
+        if "namespaces" in result.get("query", {}):
+            for ns in result["query"]["namespaces"].values():
                 # skip main namespace -- no prefixes
-                if ns.get('name'):
-                    namespaces[ns['name']] = ns['id']
+                if ns.get("name"):
+                    namespaces[ns["name"]] = ns["id"]
         return namespaces
 
     wiki_languages = get_wikipedia_sites()
-    print(f'{len(wiki_languages)} languages: {wiki_languages}')
+    print(f"{len(wiki_languages)} languages: {wiki_languages}")
     NAMESPACES = {}
     for lang in wiki_languages:
         NAMESPACES[lang] = get_namespace_prefix_map(lang)
         time.sleep(0.5)
     print(NAMESPACES)
+
+def get_tid(html_string):
+    """
+    Utility for extracting the id of an element from a HTML string.
+    """
+    return html_string["about"] if html_string.has_attr("about") else None
+
+def check_transclusion(html_string):
+    """
+    Utility for checking if an element is transcluded on the web page.
+    """
+    if html_string.has_attr("about") and html_string["about"].startswith("#mwt"):
+        return True
+    return False
