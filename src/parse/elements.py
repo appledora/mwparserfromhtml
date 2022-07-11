@@ -11,7 +11,7 @@ class Element:
         self.html_string = html_string
         self.title = None
         self.plaintext = html_string.get_text()
-        self.id = get_id(html_string)
+        self.tid = get_tid(html_string)
         self.transclusion = check_transclusion(html_string)
 
     def __str__(self):
@@ -24,7 +24,6 @@ class Wikilink(Element):
     - disambiguation: boolean, True if if the wikilink leads to a disambiguation page
     - redirect: boolean, True if the wikilink is a redirect
     - redlink: boolean, True if the wikilink is a redlink
-    - transclusion: boolean, True if the wikilink was transcluded onto the page
     - interwiki: boolean, True if the wikilink is an interwiki link
     """
 
@@ -57,7 +56,6 @@ class ExternalLink(Element):
     - autolinked: boolean, True if the external link is not a numbered or a named link
     - numbered: boolean, True if the external link is a numbered link
     - named: boolean, True if the external link is a named link
-    - transclusion: boolean, True if the wikilink was transcluded onto the page
     """
 
     def __init__(self, html_string):
@@ -82,7 +80,6 @@ class Category(Element):
     """
     Instantiates a Category object from an HTML string or a BeautifulSoup Tag object. The Category object contains the following attributes:
     - title: the title of the Category normalized from the link
-    - transclusion: True if the Category was transcluded onto the page
     """
 
     def __init__(self, html_string):
@@ -97,7 +94,6 @@ class Category(Element):
 class Template(Element):
     """
     Instantiates a Template object from HTML string. The Template object contains the following attributes:
-    - transclusion: boolean, True if the wikilink was transcluded onto the page
     """
 
     def __init__(self, html_string, data_dictionary):
