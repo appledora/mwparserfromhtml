@@ -30,7 +30,7 @@ def test_get_sections_two():
 def test_get_comments_one():
     article = Article(example_html_one)
     number_of_expected_headers = 0
-    assert len(article.get_headers()) == number_of_expected_headers
+    assert len(article.get_comments()) == number_of_expected_headers
 
 
 def test_get_comments_two():
