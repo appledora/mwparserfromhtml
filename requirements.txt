@@ -1,74 +1,47 @@
-argon2-cffi==21.3.0
-argon2-cffi-bindings==21.2.0
-asttokens==2.0.5
-attrs==21.4.0
-backcall==0.2.0
-beautifulsoup4==4.10.0
-bleach==4.1.0
-brotlipy==0.7.0
-certifi==2021.10.8
-cffi @ file:///opt/conda/conda-bld/cffi_1642701102775/work
-charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
-conda==4.11.0
-conda-content-trust @ file:///tmp/build/80754af9/conda-content-trust_1617045594566/work
-conda-package-handling @ file:///tmp/build/80754af9/conda-package-handling_1618262147379/work
-cryptography @ file:///tmp/build/80754af9/cryptography_1639414572950/work
-debugpy==1.6.0
-decorator==5.1.1
-defusedxml==0.7.1
-entrypoints==0.4
-executing==0.8.3
-fastjsonschema==2.15.3
-idna @ file:///tmp/build/80754af9/idna_1637925883363/work
-ipykernel==6.12.1
-ipython==8.2.0
-ipython-genutils==0.2.0
-jedi==0.18.1
-Jinja2==3.1.1
-JPype1==1.4.0
-jsonschema==4.4.0
-jupyter-client==7.2.1
-jupyter-core==4.9.2
-jupyterlab-pygments==0.1.2
-MarkupSafe==2.1.1
-matplotlib-inline==0.1.3
-mistune==0.8.4
-nbclient==0.5.13
-nbconvert==6.4.5
-nbformat==5.3.0
-nest-asyncio==1.5.5
-notebook==6.4.10
-packaging==21.3
-pandocfilters==1.5.0
-parso==0.8.3
-pexpect==4.8.0
-pickleshare==0.7.5
-prometheus-client==0.14.0
-prompt-toolkit==3.0.29
-psutil==5.9.0
-ptyprocess==0.7.0
-pure-eval==0.2.2
-pycosat==0.6.3
-pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
-Pygments==2.11.2
-pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1635333100036/work
-pyparsing==3.0.7
-pyrsistent==0.18.1
-PySocks @ file:///tmp/build/80754af9/pysocks_1605305812635/work
-python-dateutil==2.8.2
-pyzmq==22.3.0
-requests @ file:///opt/conda/conda-bld/requests_1641824580448/work
-ruamel-yaml-conda @ file:///tmp/build/80754af9/ruamel_yaml_1616016711199/work
-Send2Trash==1.8.0
-six @ file:///tmp/build/80754af9/six_1623709665295/work
-soupsieve==2.3.1
-stack-data==0.2.0
-sutime==1.0.1
-terminado==0.13.3
-testpath==0.6.0
-tornado==6.1
-tqdm @ file:///tmp/build/80754af9/tqdm_1635330843403/work
-traitlets==5.1.1
-urllib3==1.26.7
-wcwidth==0.2.5
-webencodings==0.5.1
+asttokens
+backcall
+beautifulsoup4
+bs4
+certifi
+charset-normalizer
+debugpy
+decorator
+entrypoints
+executing
+filelock
+idna
+ipykernel
+ipython
+jedi
+jupyter-client
+jupyter-core
+matplotlib-inline
+mwsql
+nb-utils
+nest-asyncio
+opencv-contrib-python
+packaging
+parso
+pexpect
+pickleshare
+prompt-toolkit
+psutil
+ptyprocess
+pure-eval
+Pygments
+pyparsing
+PySocks
+python-dateutil
+pyzmq
+regex
+requests
+six
+soupsieve
+split-folders
+stack-data
+tornado
+tqdm
+traitletspost1
+urllib3
+wcwidth
+wikitextparser
