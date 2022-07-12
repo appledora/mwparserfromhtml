@@ -1,4 +1,4 @@
-from .utils import check_transclusion, get_id, title_normalization
+from .utils import check_transclusion, get_tid, title_normalization
 
 
 class Element:
