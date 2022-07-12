@@ -1,4 +1,5 @@
 from cgi import test
+
 from context import Article, example_html_one, example_html_two
 
 
@@ -195,6 +196,7 @@ def test_get_templates_one():
     test_templates_objs = article.get_templates()
     number_of_expected_templates = 1
     assert len(test_templates_objs) == number_of_expected_templates
+
 
 def test_get_templates_two():
     article = Article(example_html_two)

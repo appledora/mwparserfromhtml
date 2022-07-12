@@ -78,7 +78,8 @@ class ExternalLink(Element):
 
 class Category(Element):
     """
-    Instantiates a Category object from an HTML string or a BeautifulSoup Tag object. The Category object contains the following attributes:
+    Instantiates a Category object from an HTML string or a BeautifulSoup Tag object.
+    The Category object contains the following attributes:
     - title: the title of the Category normalized from the link
     """
 
