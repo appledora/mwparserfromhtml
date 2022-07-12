@@ -1,4 +1,4 @@
-from .utils import check_transclusion, get_id, title_normalization
+from .utils import check_transclusion, get_tid, title_normalization
 
 
 class Element:
@@ -78,7 +78,8 @@ class ExternalLink(Element):
 
 class Category(Element):
     """
-    Instantiates a Category object from an HTML string or a BeautifulSoup Tag object. The Category object contains the following attributes:
+    Instantiates a Category object from an HTML string or a BeautifulSoup Tag object.
+    The Category object contains the following attributes:
     - title: the title of the Category normalized from the link
     """
 

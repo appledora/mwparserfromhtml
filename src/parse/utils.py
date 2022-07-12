@@ -43,6 +43,7 @@ def title_normalization(link):
     except Exception as e:
         return link
 
+
 def get_namespaces():
     """
     Utility for generating NAMESPACES dictionary found in const.py.
@@ -122,11 +123,13 @@ def get_namespaces():
         time.sleep(0.5)
     print(NAMESPACES)
 
+
 def get_tid(html_string):
     """
     Utility for extracting the id of an element from a HTML string.
     """
     return html_string["about"] if html_string.has_attr("about") else None
+
 
 def check_transclusion(html_string):
     """
