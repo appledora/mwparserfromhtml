@@ -94,7 +94,7 @@ class Category(Element):
 
 class Template(Element):
     """
-    Instantiates a Template object from HTML string. The Template object contains the following attributes:
+    Instantiates a Template object from HTML string. 
     """
 
     def __init__(self, html_string, data_dictionary):
@@ -106,3 +106,18 @@ class Template(Element):
         super().__init__(html_string)
         self.title = data_dictionary["wt"]
         self.link = data_dictionary["href"]
+
+
+class Reference(Element):
+    """
+    Instantiates a References object from HTML string. The References object contains the following attributes:
+    """
+
+    def __init__(self, html_string):
+        """
+        Args:
+            html_string: an HTML string or a BeautifulSoup Tag object.
+        """
+        super().__init__(html_string)
+        self.plaintext = html_string.get_text(strip=True)
+        self.ref_id = html_string["id"]
