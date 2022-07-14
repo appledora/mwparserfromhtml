@@ -1,8 +1,9 @@
-import re
 import ast
+import re
 import sys
-from typing import List
 from bs4 import BeautifulSoup
+from typing import List
+
 from .elements import ExternalLink, Template, Wikilink, Category
 from .utils import is_comment, nested_value_extract
 
@@ -61,7 +62,7 @@ class Article:
         Returns:
             List[str]: list of section names
         """
-        return [l.get_text() for l in self.parsed_html.find_all("section")]
+        return [section.get_text() for section in self.parsed_html.find_all("section")]
 
     def get_wikilinks(self) -> List[Wikilink]:
         """
@@ -87,7 +88,6 @@ class Article:
         )
         return [Category(c) for c in categories]
 
-
     def get_externallinks(self) -> List[ExternalLink]:
         """
         extract external links from a BeautifulSoup object.
@@ -106,13 +106,16 @@ class Article:
         Returns:
             List[Template]: list of templates
         """
+
         # function to extract template with data-mw attribute that contains dictionary with "parts" key
         def criterion(tag):
             return tag.has_attr("data-mw") and "parts" in ast.literal_eval(tag["data-mw"])
 
         templates = self.parsed_html.findAll(criterion)
         template_values = []
-        ## Templates appear inside the "template" key of a nested dictionary, unlike the other elements that can be directly extracted from html attributes. Which is why we have traverse the nested dictionary (may have arbitrary depth) to extract the values of the templates.
+        # Templates appear inside the "template" key of a nested dictionary, unlike the other elements
+        # that can be directly extracted from html attributes. Which is why we have traverse the nested
+        # dictionary (may have arbitrary depth) to extract the values of the templates.
         for temp in templates:
             try:
                 template_item = list(
@@ -120,9 +123,10 @@ class Article:
                 )
                 if len(template_item) != 0:
                     # we have to use a loop because there may be multiple "template" keys in the nested dictionary
-                    for item in template_item: 
-                        template_values.append((temp,item["target"])) #storing both the html string and the template values
+                    for item in template_item:
+                        template_values.append(
+                            (temp, item["target"]))  # storing both the html string and the template values
             except Exception as e:
                 print(e)
-        
+
         return [Template(t[0], t[1]) for t in template_values]
