@@ -1,5 +1,6 @@
 from bs4 import Comment  # for parsing the HTML
-
+import re
+_RE_COMBINE_WHITESPACE = re.compile(r"\s+")
 
 def is_comment(element):
     return isinstance(element, Comment)

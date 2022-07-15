@@ -4,7 +4,7 @@ import sys
 from bs4 import BeautifulSoup
 from typing import List
 
-from .elements import ExternalLink, Template, Wikilink, Category
+from .elements import ExternalLink, Reference, Template, Wikilink, Category
 from .utils import is_comment, nested_value_extract
 
 
@@ -130,3 +130,13 @@ class Article:
                 print(e)
 
         return [Template(t[0], t[1]) for t in template_values]
+
+    def get_references(self) -> List[Reference]:
+        """
+        extract references from a BeautifulSoup object.
+        Returns:
+            List[str]: list of references
+        """
+        tag = "span"
+        references = self.parsed_html.find_all(tag, attrs={"class": "mw-reference-text"})
+        return [Reference(r) for r in references]
