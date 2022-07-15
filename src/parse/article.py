@@ -72,7 +72,10 @@ class Article:
         """
         tag = "a"
         wikilinks = self.parsed_html.find_all(
-            tag, attrs={"rel": re.compile("mw:WikiLink")}
+            tag,
+            attrs={
+                "rel": re.compile("mw:WikiLink")
+            },  # using re.compile here because we also want to capture mw:WikiLink/interwiki
         )
         return [Wikilink(w) for w in wikilinks]
 
@@ -109,7 +112,9 @@ class Article:
 
         # function to extract template with data-mw attribute that contains dictionary with "parts" key
         def criterion(tag):
-            return tag.has_attr("data-mw") and "parts" in ast.literal_eval(tag["data-mw"])
+            return tag.has_attr("data-mw") and "parts" in ast.literal_eval(
+                tag["data-mw"]
+            )
 
         templates = self.parsed_html.findAll(criterion)
         template_values = []
@@ -125,7 +130,8 @@ class Article:
                     # we have to use a loop because there may be multiple "template" keys in the nested dictionary
                     for item in template_item:
                         template_values.append(
-                            (temp, item["target"]))  # storing both the html string and the template values
+                            (temp, item["target"])
+                        )  # storing both the html string and the template values
             except Exception as e:
                 print(e)
 
