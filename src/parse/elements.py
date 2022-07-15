@@ -1,4 +1,4 @@
-from .utils import check_transclusion, get_tid, title_normalization
+from .utils import check_transclusion, get_tid, title_normalization, _RE_COMBINE_WHITESPACE
 
 
 class Element:
@@ -122,4 +122,5 @@ class Reference(Element):
             - ref_id: the id of the reference, that can be used to connect it with the place of reference
         """
         super().__init__(html_string)
+        self.plaintext = _RE_COMBINE_WHITESPACE.sub(" ", html_string.get_text())
         self.ref_id = html_string["id"]
