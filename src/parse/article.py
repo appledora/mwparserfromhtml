@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from typing import List
 
 from .elements import ExternalLink, Reference, Template, Wikilink, Category
-from .utils import is_comment, nested_value_extract
+from .utils import is_comment, nested_value_extract, dfs
 
 
 class Article:
@@ -140,3 +140,6 @@ class Article:
         tag = "span"
         references = self.parsed_html.find_all(tag, attrs={"class": "mw-reference-text"})
         return [Reference(r) for r in references]
+
+    def get_plaintext(self, skip_categories=False, skip_transclusion=False, skip_headers=False):
+        return ''.join(dfs(self.parsed_html.body, skip_categories=skip_categories, skip_transclusion=skip_transclusion, skip_headers=skip_headers))
