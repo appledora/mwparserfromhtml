@@ -203,3 +203,15 @@ def test_get_templates_two():
     test_templates_objs = article.get_templates()
     number_of_expected_templates = 6
     assert len(test_templates_objs) == number_of_expected_templates
+
+
+def test_get_references_one():
+    article = Article(example_html_one)
+    number_of_expected_references = 0
+    assert len(article.get_references()) == number_of_expected_references
+
+
+def test_get_references_two():
+    article = Article(example_html_two)
+    number_of_expected_references = 1
+    assert len(article.get_references()) == number_of_expected_references
