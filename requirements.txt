@@ -9,6 +9,7 @@ decorator
 entrypoints
 executing
 filelock
+flake8
 idna
 ipykernel
 ipython
@@ -29,6 +30,7 @@ psutil
 ptyprocess
 pure-eval
 Pygments
+pylint
 pyparsing
 PySocks
 pytest
