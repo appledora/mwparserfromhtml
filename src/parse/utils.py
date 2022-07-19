@@ -57,13 +57,13 @@ def get_namespaces():
 
     def get_wikipedia_sites():
         session = requests.Session()
-        base_url = 'https://meta.wikimedia.org/w/api.php'
+        base_url = "https://meta.wikimedia.org/w/api.php"
         params = {
             "action": "sitematrix",
-            "smlangprop": '|'.join(['code', 'site']),
-            "smsiteprop": '|'.join(['url']),
+            "smlangprop": "|".join(["code", "site"]),
+            "smsiteprop": "|".join(["url"]),
             "format": "json",
-            "formatversion": "2"
+            "formatversion": "2",
         }
         result = session.get(url=base_url, params=params)
         result = result.json()
@@ -103,7 +103,7 @@ def get_namespaces():
             "meta": "siteinfo",
             "siprop": "namespaces",
             "format": "json",
-            "formatversion": "2"
+            "formatversion": "2",
         }
         result = session.get(url=base_url, params=params)
         result = result.json()
