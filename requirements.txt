@@ -44,7 +44,7 @@ split-folders
 stack-data
 tornado
 tqdm
-traitletspost1
+traitlets
 urllib3
 wcwidth
 wikitextparser
