@@ -111,20 +111,3 @@ class Template(Element):
         self.link = data_dictionary["href"]
 
 
-<<<<<<< HEAD
-class Reference(Element):
-    """
-    Instantiates a References object from HTML string. The References object contains the following attributes:
-    """
-
-    def __init__(self, html_string):
-        """
-        Args:
-            html_string: an HTML string or a BeautifulSoup Tag object. Reference objects include the following attribute:
-            - ref_id: the id of the reference, that can be used to connect it with the place of reference
-        """
-        super().__init__(html_string)
-        self.plaintext = _RE_COMBINE_WHITESPACE.sub(" ", html_string.get_text())
-        self.ref_id = html_string["id"]
-=======
->>>>>>> 741dc0b (feature: get_plaintext() method with user parameters)

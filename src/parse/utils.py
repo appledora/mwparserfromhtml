@@ -207,7 +207,9 @@ def dfs(
     skip_headers=False,
     skip_categories=False,
 ):
-    plaintext = ""
+    """
+    recursive depth-first search function to traverse the HTML tree
+    """
     for cnode in parent_node.contents:
         if hasattr(cnode, "attrs"):  # if node has attributes, check the attributes
             tag_obj = identify_elements_(cnode)
@@ -219,24 +221,23 @@ def dfs(
             elif is_heading(cnode):
                 if skip_headers:
                     continue
-                plaintext += cnode.text
+                yield cnode.text
             elif tag_obj.name in ["Wikilink", "ExternalLink", "Category"]:
                 if skip_categories and tag_obj.name == "Category":
                     continue
-                else:
-                    plaintext += (
+                else:   
+                    yield tag_obj.plaintext if len(
                         tag_obj.plaintext
-                        if len(tag_obj.plaintext) > 0
-                        else tag_obj.title
-                    )
+                    ) > 0 else tag_obj.title
+
             else:
-                plaintext += dfs(
+                for pt in dfs(
                     cnode,
                     skip_transclusion=skip_transclusion,
                     skip_categories=skip_categories,
                     skip_headers=skip_headers,
-                )
+                ):
+                    yield pt
         # Raw string -- output
         else:
-            plaintext += cnode.text
-    return plaintext
+            yield cnode.text

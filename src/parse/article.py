@@ -5,13 +5,8 @@ import bs4
 from bs4 import BeautifulSoup
 from typing import List
 
-<<<<<<< HEAD
 from .elements import ExternalLink, Reference, Template, Wikilink, Category
 from .utils import is_comment, nested_value_extract, dfs
-=======
-from .elements import ExternalLink, Template, Wikilink, Category
-from .utils import dfs, is_comment, nested_value_extract, _RE_COMBINE_WHITESPACE
->>>>>>> 741dc0b (feature: get_plaintext() method with user parameters)
 
 
 class Article:
@@ -158,6 +153,7 @@ class Article:
         return ''.join(dfs(self.parsed_html.body, skip_categories=skip_categories, skip_transclusion=skip_transclusion, skip_headers=skip_headers))
 =======
     def get_plaintext(self, skip_categories=False, skip_transclusion=False, skip_headers=False) -> str:
+<<<<<<< HEAD
         article_text = ""
         for node in self.parsed_html(["style", "script", "meta", "title", "[document]"]): 
             node.decompose() 
@@ -168,3 +164,16 @@ class Article:
                 article_text += _RE_COMBINE_WHITESPACE.sub(" ",dfs(cont, skip_categories=skip_categories, skip_transclusion=skip_transclusion, skip_headers=skip_headers))
         return article_text
 >>>>>>> 741dc0b (feature: get_plaintext() method with user parameters)
+=======
+        """
+        extract the plaintext from a BeautifulSoup object.
+        Args:
+            skip_categories: bool, whether to skip categories
+            skip_transclusion: bool, whether to skip transclusions
+            skip_headers: bool, whether to skip headers
+        Returns:
+            str: plaintext of the article
+        """
+
+        return ''.join(dfs(self.parsed_html.body, skip_categories=skip_categories, skip_transclusion=skip_transclusion, skip_headers=skip_headers))
+>>>>>>> 8f0f776 (feature: get_plaintext() method with user parameters)
