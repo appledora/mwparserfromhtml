@@ -1,6 +1,7 @@
 from .utils import check_transclusion, get_tid, title_normalization, _RE_COMBINE_WHITESPACE
 
 
+
 class Element:
     """
     Base class to instantiate a wiki element from the HTML
@@ -110,6 +111,7 @@ class Template(Element):
         self.link = data_dictionary["href"]
 
 
+<<<<<<< HEAD
 class Reference(Element):
     """
     Instantiates a References object from HTML string. The References object contains the following attributes:
@@ -124,3 +126,5 @@ class Reference(Element):
         super().__init__(html_string)
         self.plaintext = _RE_COMBINE_WHITESPACE.sub(" ", html_string.get_text())
         self.ref_id = html_string["id"]
+=======
+>>>>>>> 741dc0b (feature: get_plaintext() method with user parameters)

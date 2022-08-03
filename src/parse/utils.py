@@ -1,9 +1,8 @@
 import re
 from bs4 import Comment  # for parsing the HTML
 import re
-from .elements import Element, Category, Wikilink, ExternalLink
 
-_RE_COMBINE_WHITESPACE = re.compile(r"\s+")  #replace multiple newlines/spaces with one
+_RE_COMBINE_WHITESPACE = re.compile(r"\s+")  # replace multiple newlines/spaces with one
 
 
 def is_comment(element):
@@ -185,6 +184,12 @@ def identify_elements_(tag_string):
     """
     utility function that returns an instance of the identified object
     """
+    from .elements import (
+        Element,
+        Wikilink,
+        Category,
+        ExternalLink,
+    )  # to prevent circular/mutual import
 
     if is_category(tag_string):
         return Category(tag_string)
@@ -194,3 +199,44 @@ def identify_elements_(tag_string):
         return ExternalLink(tag_string)
     else:
         return Element(tag_string)
+
+
+def dfs(
+    parent_node,
+    skip_transclusion=False,
+    skip_headers=False,
+    skip_categories=False,
+):
+    plaintext = ""
+    for cnode in parent_node.contents:
+        if hasattr(cnode, "attrs"):  # if node has attributes, check the attributes
+            tag_obj = identify_elements_(cnode)
+            nested_transclusion = skip_transclusion and tag_obj.transclusion
+            ## don't have to explicitly check for comments
+
+            if nested_transclusion:
+                continue
+            elif is_heading(cnode):
+                if skip_headers:
+                    continue
+                plaintext += cnode.text
+            elif tag_obj.name in ["Wikilink", "ExternalLink", "Category"]:
+                if skip_categories and tag_obj.name == "Category":
+                    continue
+                else:
+                    plaintext += (
+                        tag_obj.plaintext
+                        if len(tag_obj.plaintext) > 0
+                        else tag_obj.title
+                    )
+            else:
+                plaintext += dfs(
+                    cnode,
+                    skip_transclusion=skip_transclusion,
+                    skip_categories=skip_categories,
+                    skip_headers=skip_headers,
+                )
+        # Raw string -- output
+        else:
+            plaintext += cnode.text
+    return plaintext
