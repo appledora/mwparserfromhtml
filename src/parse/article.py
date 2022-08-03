@@ -1,7 +1,6 @@
 import ast
 import re
 import sys
-import bs4
 from bs4 import BeautifulSoup
 from typing import List
 
@@ -138,7 +137,6 @@ class Article:
 
         return [Template(t[0], t[1]) for t in template_values]
 
-<<<<<<< HEAD
     def get_references(self) -> List[Reference]:
         """
         extract references from a BeautifulSoup object.
@@ -151,29 +149,3 @@ class Article:
 
     def get_plaintext(self, skip_categories=False, skip_transclusion=False, skip_headers=False):
         return ''.join(dfs(self.parsed_html.body, skip_categories=skip_categories, skip_transclusion=skip_transclusion, skip_headers=skip_headers))
-=======
-    def get_plaintext(self, skip_categories=False, skip_transclusion=False, skip_headers=False) -> str:
-<<<<<<< HEAD
-        article_text = ""
-        for node in self.parsed_html(["style", "script", "meta", "title", "[document]"]): 
-            node.decompose() 
-        for cont in self.parsed_html.body.contents: 
-            if type(cont) == bs4.element.NavigableString and len(cont.strip()) == 0: # sometimes there are empty lines instead of html tags, likely arises when we format and save the html string
-                continue
-            else:
-                article_text += _RE_COMBINE_WHITESPACE.sub(" ",dfs(cont, skip_categories=skip_categories, skip_transclusion=skip_transclusion, skip_headers=skip_headers))
-        return article_text
->>>>>>> 741dc0b (feature: get_plaintext() method with user parameters)
-=======
-        """
-        extract the plaintext from a BeautifulSoup object.
-        Args:
-            skip_categories: bool, whether to skip categories
-            skip_transclusion: bool, whether to skip transclusions
-            skip_headers: bool, whether to skip headers
-        Returns:
-            str: plaintext of the article
-        """
-
-        return ''.join(dfs(self.parsed_html.body, skip_categories=skip_categories, skip_transclusion=skip_transclusion, skip_headers=skip_headers))
->>>>>>> 8f0f776 (feature: get_plaintext() method with user parameters)
