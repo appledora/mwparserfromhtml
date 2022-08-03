@@ -225,7 +225,7 @@ def dfs(
             elif tag_obj.name in ["Wikilink", "ExternalLink", "Category"]:
                 if skip_categories and tag_obj.name == "Category":
                     continue
-                else:   
+                else:
                     yield tag_obj.plaintext if len(
                         tag_obj.plaintext
                     ) > 0 else tag_obj.title

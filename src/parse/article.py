@@ -144,8 +144,19 @@ class Article:
             List[str]: list of references
         """
         tag = "span"
-        references = self.parsed_html.find_all(tag, attrs={"class": "mw-reference-text"})
+        references = self.parsed_html.find_all(
+            tag, attrs={"class": "mw-reference-text"}
+        )
         return [Reference(r) for r in references]
 
-    def get_plaintext(self, skip_categories=False, skip_transclusion=False, skip_headers=False):
-        return ''.join(dfs(self.parsed_html.body, skip_categories=skip_categories, skip_transclusion=skip_transclusion, skip_headers=skip_headers))
+    def get_plaintext(
+        self, skip_categories=False, skip_transclusion=False, skip_headers=False
+    ):
+        return "".join(
+            dfs(
+                self.parsed_html.body,
+                skip_categories=skip_categories,
+                skip_transclusion=skip_transclusion,
+                skip_headers=skip_headers,
+            )
+        )
