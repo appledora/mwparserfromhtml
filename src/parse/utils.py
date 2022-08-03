@@ -1,9 +1,49 @@
+import re
 from bs4 import Comment  # for parsing the HTML
 import re
-_RE_COMBINE_WHITESPACE = re.compile(r"\s+")
+from .elements import Element, Category, Wikilink, ExternalLink
+
+_RE_COMBINE_WHITESPACE = re.compile(r"\s+")  #replace multiple newlines/spaces with one
+
 
 def is_comment(element):
     return isinstance(element, Comment)
+
+
+def is_wikilink(tag_string):
+    return (
+        tag_string.name == "a"
+        and tag_string.has_attr("rel")
+        and "mw:WikiLink" in tag_string["rel"]
+    )
+
+
+def is_category(tag_string):
+    return (
+        tag_string.name == "link"
+        and tag_string.has_attr("rel")
+        and "mw:PageProp/Category" in tag_string["rel"]
+    )
+
+
+def is_external_link(tag_string):
+    return (
+        tag_string.name == "a"
+        and tag_string.has_attr("rel")
+        and "mw:ExtLink" in tag_string["rel"]
+    )
+
+
+def is_heading(tag_string):
+    return tag_string.name in ["h2", "h3", "h4", "h5", "h6"]
+
+
+def is_stub(tag_string):
+    return (
+        tag_string.name == "p"
+        and tag_string.has_attr("class")
+        and "asbox-body" in tag_string["class"]
+    )
 
 
 def nested_value_extract(key, var):
@@ -57,13 +97,13 @@ def get_namespaces():
 
     def get_wikipedia_sites():
         session = requests.Session()
-        base_url = 'https://meta.wikimedia.org/w/api.php'
+        base_url = "https://meta.wikimedia.org/w/api.php"
         params = {
             "action": "sitematrix",
-            "smlangprop": '|'.join(['code', 'site']),
-            "smsiteprop": '|'.join(['url']),
+            "smlangprop": "|".join(["code", "site"]),
+            "smsiteprop": "|".join(["url"]),
             "format": "json",
-            "formatversion": "2"
+            "formatversion": "2",
         }
         result = session.get(url=base_url, params=params)
         result = result.json()
@@ -103,7 +143,7 @@ def get_namespaces():
             "meta": "siteinfo",
             "siprop": "namespaces",
             "format": "json",
-            "formatversion": "2"
+            "formatversion": "2",
         }
         result = session.get(url=base_url, params=params)
         result = result.json()
@@ -125,17 +165,32 @@ def get_namespaces():
     print(NAMESPACES)
 
 
-def get_tid(html_string):
+def get_tid(tag_string):
     """
     Utility for extracting the id of an element from a HTML string.
     """
-    return html_string["about"] if html_string.has_attr("about") else None
+    return tag_string["about"] if tag_string.has_attr("about") else None
 
 
-def check_transclusion(html_string):
+def check_transclusion(tag_string):
     """
     Utility for checking if an element is transcluded on the web page.
     """
-    if html_string.has_attr("about") and html_string["about"].startswith("#mwt"):
+    if tag_string.has_attr("about") and tag_string["about"].startswith("#mwt"):
         return True
     return False
+
+
+def identify_elements_(tag_string):
+    """
+    utility function that returns an instance of the identified object
+    """
+
+    if is_category(tag_string):
+        return Category(tag_string)
+    if is_wikilink(tag_string):
+        return Wikilink(tag_string)
+    if is_external_link(tag_string):
+        return ExternalLink(tag_string)
+    else:
+        return Element(tag_string)
