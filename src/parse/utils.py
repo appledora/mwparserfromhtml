@@ -1,8 +1,7 @@
 from bs4 import Comment  # for parsing the HTML
-import re
-_RE_COMBINE_WHITESPACE = re.compile(r"\s+")
+from .const import NAMESPACES
 
-def is_comment(element):
+def is_comment(element) -> bool:
     return isinstance(element, Comment)
 
 
@@ -139,3 +138,13 @@ def check_transclusion(html_string):
     if html_string.has_attr("about") and html_string["about"].startswith("#mwt"):
         return True
     return False
+
+def map_namespace(href, lang) -> int:
+    try: 
+        namespace = href.split(":")[0].strip("./").replace("_", " ")
+        namespace_id =  NAMESPACES[lang][namespace] 
+        return namespace_id
+    except Exception as e:
+        return 0
+
+    

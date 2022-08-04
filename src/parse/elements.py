@@ -1,4 +1,5 @@
-from .utils import check_transclusion, get_tid, title_normalization, _RE_COMBINE_WHITESPACE
+from .utils import check_transclusion, get_tid, map_namespace, title_normalization
+from .const import _RE_COMBINE_WHITESPACE
 
 
 class Element:
@@ -27,13 +28,16 @@ class Wikilink(Element):
     - interwiki: boolean, True if the wikilink is an interwiki link
     """
 
-    def __init__(self, html_string):
+    def __init__(self, html_string, language = "en"):
         """
         Args:
             html_string: an HTML string or a BeautifulSoup Tag object.
+            language: the language of article content, required for determining the namespace of the wikilink.
         """
         super().__init__(html_string)
         self.title = html_string["title"] if html_string.has_attr("title") else ""
+        self.link = html_string["href"] if html_string.has_attr("href") else ""
+        self.namespace_id = map_namespace(self.link, language)
         self.disambiguation = False
         self.redirect = False
         self.redlink = False
@@ -65,6 +69,7 @@ class ExternalLink(Element):
         """
         super().__init__(html_string)
         self.title = html_string["title"] if html_string.has_attr("title") else ""
+        self.link = html_string["href"] if html_string.has_attr("href") else ""
         self.autolinked = False
         self.numbered = False
         self.named = False
@@ -90,6 +95,7 @@ class Category(Element):
         """
         super().__init__(html_string)
         self.title = title_normalization(html_string["href"])
+        self.link = html_string["href"] if html_string.has_attr("href") else ""
 
 
 class Template(Element):

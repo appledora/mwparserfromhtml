@@ -22,7 +22,8 @@ class Article:
         self.title = self.parsed_html.title.text
         self.address = self.parsed_html.find("link", {"rel": "dc:isVersionOf"})["href"]
         self.size = sys.getsizeof(html)
-
+        self.language = self.parsed_html.find("meta", {"http-equiv" : "content-language"})["content"]
+    
     def __str__(self):
         """
         String representation of the Article class
@@ -74,7 +75,7 @@ class Article:
         wikilinks = self.parsed_html.find_all(
             tag, attrs={"rel": re.compile("mw:WikiLink")}
         )
-        return [Wikilink(w) for w in wikilinks]
+        return [Wikilink(w, self.language) for w in wikilinks]
 
     def get_categories(self) -> List[Category]:
         """
