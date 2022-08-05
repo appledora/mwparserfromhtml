@@ -28,7 +28,7 @@ class Wikilink(Element):
     - interwiki: boolean, True if the wikilink is an interwiki link
     """
 
-    def __init__(self, html_string, language = "en"):
+    def __init__(self, html_string, namespace = "en"):
         """
         Args:
             html_string: an HTML string or a BeautifulSoup Tag object.
@@ -37,7 +37,7 @@ class Wikilink(Element):
         super().__init__(html_string)
         self.title = html_string["title"] if html_string.has_attr("title") else ""
         self.link = html_string["href"] if html_string.has_attr("href") else ""
-        self.namespace_id = map_namespace(self.link, language)
+        self.namespace_id = map_namespace(self.link, namespace)
         self.disambiguation = False
         self.redirect = False
         self.redlink = False
