@@ -1,9 +1,48 @@
+import re
 from bs4 import Comment  # for parsing the HTML
 import re
-_RE_COMBINE_WHITESPACE = re.compile(r"\s+")
+
+_RE_COMBINE_WHITESPACE = re.compile(r"\s+")  # replace multiple newlines/spaces with one
+
 
 def is_comment(element):
     return isinstance(element, Comment)
+
+
+def is_wikilink(tag_string):
+    return (
+        tag_string.name == "a"
+        and tag_string.has_attr("rel")
+        and "mw:WikiLink" in tag_string["rel"]
+    )
+
+
+def is_category(tag_string):
+    return (
+        tag_string.name == "link"
+        and tag_string.has_attr("rel")
+        and "mw:PageProp/Category" in tag_string["rel"]
+    )
+
+
+def is_external_link(tag_string):
+    return (
+        tag_string.name == "a"
+        and tag_string.has_attr("rel")
+        and "mw:ExtLink" in tag_string["rel"]
+    )
+
+
+def is_heading(tag_string):
+    return tag_string.name in ["h2", "h3", "h4", "h5", "h6"]
+
+
+def is_stub(tag_string):
+    return (
+        tag_string.name == "p"
+        and tag_string.has_attr("class")
+        and "asbox-body" in tag_string["class"]
+    )
 
 
 def nested_value_extract(key, var):
@@ -57,13 +96,13 @@ def get_namespaces():
 
     def get_wikipedia_sites():
         session = requests.Session()
-        base_url = 'https://meta.wikimedia.org/w/api.php'
+        base_url = "https://meta.wikimedia.org/w/api.php"
         params = {
             "action": "sitematrix",
-            "smlangprop": '|'.join(['code', 'site']),
-            "smsiteprop": '|'.join(['url']),
+            "smlangprop": "|".join(["code", "site"]),
+            "smsiteprop": "|".join(["url"]),
             "format": "json",
-            "formatversion": "2"
+            "formatversion": "2",
         }
         result = session.get(url=base_url, params=params)
         result = result.json()
@@ -103,7 +142,7 @@ def get_namespaces():
             "meta": "siteinfo",
             "siprop": "namespaces",
             "format": "json",
-            "formatversion": "2"
+            "formatversion": "2",
         }
         result = session.get(url=base_url, params=params)
         result = result.json()
@@ -125,17 +164,80 @@ def get_namespaces():
     print(NAMESPACES)
 
 
-def get_tid(html_string):
+def get_tid(tag_string):
     """
     Utility for extracting the id of an element from a HTML string.
     """
-    return html_string["about"] if html_string.has_attr("about") else None
+    return tag_string["about"] if tag_string.has_attr("about") else None
 
 
-def check_transclusion(html_string):
+def check_transclusion(tag_string):
     """
     Utility for checking if an element is transcluded on the web page.
     """
-    if html_string.has_attr("about") and html_string["about"].startswith("#mwt"):
+    if tag_string.has_attr("about") and tag_string["about"].startswith("#mwt"):
         return True
     return False
+
+
+def identify_elements_(tag_string):
+    """
+    utility function that returns an instance of the identified object
+    """
+    from .elements import (
+        Element,
+        Wikilink,
+        Category,
+        ExternalLink,
+    )  # to prevent circular/mutual import
+
+    if is_category(tag_string):
+        return Category(tag_string)
+    if is_wikilink(tag_string):
+        return Wikilink(tag_string)
+    if is_external_link(tag_string):
+        return ExternalLink(tag_string)
+    else:
+        return Element(tag_string)
+
+
+def dfs(
+    parent_node,
+    skip_transclusion=False,
+    skip_headers=False,
+    skip_categories=False,
+):
+    """
+    recursive depth-first search function to traverse the HTML tree
+    """
+    for cnode in parent_node.contents:
+        if hasattr(cnode, "attrs"):  # if node has attributes, check the attributes
+            tag_obj = identify_elements_(cnode)
+            nested_transclusion = skip_transclusion and tag_obj.transclusion
+            ## don't have to explicitly check for comments
+
+            if nested_transclusion:
+                continue
+            elif is_heading(cnode):
+                if skip_headers:
+                    continue
+                yield cnode.text
+            elif tag_obj.name in ["Wikilink", "ExternalLink", "Category"]:
+                if skip_categories and tag_obj.name == "Category":
+                    continue
+                else:
+                    yield tag_obj.plaintext if len(
+                        tag_obj.plaintext
+                    ) > 0 else tag_obj.title
+
+            else:
+                for pt in dfs(
+                    cnode,
+                    skip_transclusion=skip_transclusion,
+                    skip_categories=skip_categories,
+                    skip_headers=skip_headers,
+                ):
+                    yield pt
+        # Raw string -- output
+        else:
+            yield cnode.text
