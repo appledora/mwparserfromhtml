@@ -215,3 +215,14 @@ def test_get_references_two():
     article = Article(example_html_two)
     number_of_expected_references = 1
     assert len(article.get_references()) == number_of_expected_references
+
+
+def test_get_media_one():
+    article = Article(example_html_one)
+    number_of_expected_media = 1
+    assert len(article.get_media()) == number_of_expected_media
+
+def test_get_media_two():
+    article = Article(example_html_two)
+    number_of_expected_media = 1
+    assert len(article.get_media()) == number_of_expected_media
