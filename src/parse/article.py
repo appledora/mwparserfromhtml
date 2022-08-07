@@ -4,7 +4,7 @@ import sys
 from bs4 import BeautifulSoup
 from typing import List
 
-from .elements import ExternalLink, Reference, Template, Wikilink, Category
+from .elements import ExternalLink, Media, Reference, Template, Wikilink, Category
 from .utils import is_comment, nested_value_extract
 
 
@@ -140,3 +140,18 @@ class Article:
         tag = "span"
         references = self.parsed_html.find_all(tag, attrs={"class": "mw-reference-text"})
         return [Reference(r) for r in references]
+
+
+    def get_media(self, skip_images = False, skip_audio = False, skip_video = False) -> List[Media] : 
+        media_objects = []
+        if not skip_images:
+            images = self.parsed_html.find_all("img")
+            media_objects.extend([Media(m, 1) for m in images])
+        if not skip_audio:
+            audio = self.parsed_html.find_all("audio")
+            media_objects.extend([Media(m) for m in audio])
+        if not skip_video:
+            video = self.parsed_html.find_all("video")
+            media_objects.extend([Media(m) for m in video])
+        return media_objects
+        
