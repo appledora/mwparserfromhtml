@@ -137,6 +137,7 @@ class Media(Element):
         """
         Args:
             html_string: an HTML string or a BeautifulSoup Tag object.
+            media_type: if the value is one, it represents an image object. Otherwise, it can be audio or video. 
         """
         super().__init__(html_string)
         if media_type == 1:
