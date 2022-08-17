@@ -149,7 +149,4 @@ class Media(Element):
         else:
             sources_tag = html_string.find_all("source")
             self.link = [tag["src"] for tag in sources_tag]
-            self.extension = [link.split(".")[-1] for link in self.link]
-
-        
-        
+            self.extension = [link.split(".")[-1] for link in self.link]        
