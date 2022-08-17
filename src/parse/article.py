@@ -147,11 +147,34 @@ class Article:
         if not skip_images:
             images = self.parsed_html.find_all("img")
             media_objects.extend([Media(m, 1) for m in images])
+            for im in images : 
+                print(im.parent)
+                print("-"*50)
+                print(im.parent.parent)
+                print("-"*50)
+                print(im.parent.parent.find("figcaption"))
+                print("#"*50)
+
         if not skip_audio:
             audio = self.parsed_html.find_all("audio")
             media_objects.extend([Media(m) for m in audio])
+            for im in audio : 
+                print(im.parent)
+                print("-"*50)
+                print(im.parent.parent)
+                print("-"*50)
+                print(im.parent.find("figcaption"))
+                print("#"*50)
         if not skip_video:
             video = self.parsed_html.find_all("video")
             media_objects.extend([Media(m) for m in video])
+            for im in video : 
+                print(im.parent)
+                print("-"*50)
+                print(im.parent.parent)
+                print("-"*50)
+                print(im.parent.find("figcaption"))
+                print("#"*50)
+
         return media_objects
         
