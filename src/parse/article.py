@@ -109,7 +109,9 @@ class Article:
 
         # function to extract template with data-mw attribute that contains dictionary with "parts" key
         def criterion(tag):
-            return tag.has_attr("data-mw") and "parts" in ast.literal_eval(tag["data-mw"])
+            return tag.has_attr("data-mw") and "parts" in ast.literal_eval(
+                tag["data-mw"]
+            )
 
         templates = self.parsed_html.findAll(criterion)
         template_values = []
@@ -125,7 +127,8 @@ class Article:
                     # we have to use a loop because there may be multiple "template" keys in the nested dictionary
                     for item in template_item:
                         template_values.append(
-                            (temp, item["target"]))  # storing both the html string and the template values
+                            (temp, item["target"])
+                        )  # storing both the html string and the template values
             except Exception as e:
                 print(e)
 
@@ -138,43 +141,56 @@ class Article:
             List[str]: list of references
         """
         tag = "span"
-        references = self.parsed_html.find_all(tag, attrs={"class": "mw-reference-text"})
+        references = self.parsed_html.find_all(
+            tag, attrs={"class": "mw-reference-text"}
+        )
         return [Reference(r) for r in references]
 
-
-    def get_media(self, skip_images = False, skip_audio = False, skip_video = False) -> List[Media] : 
+    def get_media(
+        self, skip_images=False, skip_audio=False, skip_video=False
+    ) -> List[Media]:
         media_objects = []
         if not skip_images:
             images = self.parsed_html.find_all("img")
-            media_objects.extend([Media(m, 1) for m in images])
-            for im in images : 
-                print(im.parent)
-                print("-"*50)
-                print(im.parent.parent)
-                print("-"*50)
-                print(im.parent.parent.find("figcaption"))
-                print("#"*50)
+            image_captions = []
+            for im in images:
+                image_captions.append(
+                    im.parent.parent.find("figcaption").text
+                    if im.parent.parent.find("figcaption")
+                    else ""
+                )
+            media_objects.extend(
+                [
+                    Media(html_string=m[0], media_type=1, caption=m[1])
+                    for m in zip(images, image_captions)
+                ]
+            )
 
         if not skip_audio:
             audio = self.parsed_html.find_all("audio")
-            media_objects.extend([Media(m) for m in audio])
-            for im in audio : 
-                print(im.parent)
-                print("-"*50)
-                print(im.parent.parent)
-                print("-"*50)
-                print(im.parent.find("figcaption"))
-                print("#"*50)
+            audio_captions = []
+
+            for im in audio:
+                audio_captions.append(
+                    im.parent.parent.find("figcaption").text
+                    if im.parent.parent.find("figcaption")
+                    else ""
+                )
+            media_objects.extend(
+                [
+                    Media(html_string=m[0], caption=m[1])
+                    for m in zip(audio, audio_captions)
+                ]
+            )
         if not skip_video:
             video = self.parsed_html.find_all("video")
-            media_objects.extend([Media(m) for m in video])
-            for im in video : 
-                print(im.parent)
-                print("-"*50)
-                print(im.parent.parent)
-                print("-"*50)
-                print(im.parent.find("figcaption"))
-                print("#"*50)
+            video_captions = []
+            for im in video:
+                video_captions.append(
+                    im.parent.parent.find("figcaption").get_text()
+                    if im.parent.parent.find("figcaption")
+                    else ""
+                )
+            media_objects.extend([Media(html_string=m[0], caption=m[1]) for m in zip(video, video_captions)])
 
         return media_objects
-        

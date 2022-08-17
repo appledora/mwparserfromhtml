@@ -133,16 +133,19 @@ class Media(Element):
     - link: the link to the media
     """
 
-    def __init__(self, html_string, media_type = 0):
+    def __init__(self, html_string, media_type = 0, caption = None):
         """
         Args:
             html_string: an HTML string or a BeautifulSoup Tag object.
+            media_type: if the value is one, it represents an image object. Otherwise, it can be audio or video. 
         """
         super().__init__(html_string)
+        self.caption = caption
         if media_type == 1:
             self.title = html_string["alt"] if html_string.has_attr("alt") else ""
             self.link = html_string["src"]
             self.extension = html_string["src"].split(".")[-1]
+            
         else:
             sources_tag = html_string.find_all("source")
             self.link = [tag["src"] for tag in sources_tag]
