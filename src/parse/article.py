@@ -4,13 +4,8 @@ import sys
 from bs4 import BeautifulSoup
 from typing import List
 
-<<<<<<< HEAD
 from .elements import ExternalLink, Media, Reference, Template, Wikilink, Category
-from .utils import is_comment, nested_value_extract
-=======
-from .elements import ExternalLink, Reference, Template, Wikilink, Category
 from .utils import is_comment, nested_value_extract, dfs
->>>>>>> d48e18f787088ea8afd6d0d9b2ed0677c10300d1
 
 
 class Article:
