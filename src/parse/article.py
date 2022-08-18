@@ -4,8 +4,13 @@ import sys
 from bs4 import BeautifulSoup
 from typing import List
 
+<<<<<<< HEAD
 from .elements import ExternalLink, Media, Reference, Template, Wikilink, Category
 from .utils import is_comment, nested_value_extract
+=======
+from .elements import ExternalLink, Reference, Template, Wikilink, Category
+from .utils import is_comment, nested_value_extract, dfs
+>>>>>>> d48e18f787088ea8afd6d0d9b2ed0677c10300d1
 
 
 class Article:
@@ -72,7 +77,10 @@ class Article:
         """
         tag = "a"
         wikilinks = self.parsed_html.find_all(
-            tag, attrs={"rel": re.compile("mw:WikiLink")}
+            tag,
+            attrs={
+                "rel": re.compile("mw:WikiLink")
+            },  # using re.compile here because we also want to capture mw:WikiLink/interwiki
         )
         return [Wikilink(w) for w in wikilinks]
 
@@ -194,3 +202,14 @@ class Article:
             media_objects.extend([Media(html_string=m[0], caption=m[1]) for m in zip(video, video_captions)])
 
         return media_objects
+    def get_plaintext(
+        self, skip_categories=False, skip_transclusion=False, skip_headers=False
+    ):
+        return "".join(
+            dfs(
+                self.parsed_html.body,
+                skip_categories=skip_categories,
+                skip_transclusion=skip_transclusion,
+                skip_headers=skip_headers,
+            )
+        )

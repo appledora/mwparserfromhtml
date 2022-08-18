@@ -1,4 +1,9 @@
-from .utils import check_transclusion, get_tid, title_normalization, _RE_COMBINE_WHITESPACE
+from .utils import (
+    check_transclusion,
+    get_tid,
+    title_normalization,
+    _RE_COMBINE_WHITESPACE,
+)
 
 
 class Element:
