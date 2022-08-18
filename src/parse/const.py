@@ -1,4 +1,7 @@
+import re
+
 # Right now, keeping this file as is. Might help during future extensions and testing.
+_RE_COMBINE_WHITESPACE = re.compile(r"\s+")
 
 WIKILINK = {
     "name": "wikilink",
