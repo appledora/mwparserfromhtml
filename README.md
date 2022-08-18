@@ -77,5 +77,11 @@ You can install ``mwparserwithlove`` with ``pip``:
     html_dump.generate_summary_stats()
 ```
 ## Project Information 
-
+- Licensing 
+- Issue Tracker 
+- Documentation 
+- Contribution Guidelines
+ 
 ## Acknowledgements
+
+This project has benefited greatly from the work of Earwig ([mwparserfromhell]()) and Slavina Stefanova ([mwsql]()). 
