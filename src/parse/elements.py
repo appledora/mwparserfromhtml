@@ -1,5 +1,10 @@
 from .utils import check_transclusion, get_tid, map_namespace, title_normalization
 from .const import _RE_COMBINE_WHITESPACE
+from .utils import (
+    check_transclusion,
+    get_tid,
+    title_normalization,
+)
 
 
 class Element:
