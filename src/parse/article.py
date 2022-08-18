@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from typing import List
 
 from .elements import ExternalLink, Reference, Template, Wikilink, Category
-from .utils import is_comment, nested_value_extract
+from .utils import is_comment, nested_value_extract, dfs
 
 
 class Article:
@@ -72,7 +72,10 @@ class Article:
         """
         tag = "a"
         wikilinks = self.parsed_html.find_all(
-            tag, attrs={"rel": re.compile("mw:WikiLink")}
+            tag,
+            attrs={
+                "rel": re.compile("mw:WikiLink")
+            },  # using re.compile here because we also want to capture mw:WikiLink/interwiki
         )
         return [Wikilink(w) for w in wikilinks]
 
@@ -109,7 +112,9 @@ class Article:
 
         # function to extract template with data-mw attribute that contains dictionary with "parts" key
         def criterion(tag):
-            return tag.has_attr("data-mw") and "parts" in ast.literal_eval(tag["data-mw"])
+            return tag.has_attr("data-mw") and "parts" in ast.literal_eval(
+                tag["data-mw"]
+            )
 
         templates = self.parsed_html.findAll(criterion)
         template_values = []
@@ -125,7 +130,8 @@ class Article:
                     # we have to use a loop because there may be multiple "template" keys in the nested dictionary
                     for item in template_item:
                         template_values.append(
-                            (temp, item["target"]))  # storing both the html string and the template values
+                            (temp, item["target"])
+                        )  # storing both the html string and the template values
             except Exception as e:
                 print(e)
 
@@ -138,5 +144,19 @@ class Article:
             List[str]: list of references
         """
         tag = "span"
-        references = self.parsed_html.find_all(tag, attrs={"class": "mw-reference-text"})
+        references = self.parsed_html.find_all(
+            tag, attrs={"class": "mw-reference-text"}
+        )
         return [Reference(r) for r in references]
+
+    def get_plaintext(
+        self, skip_categories=False, skip_transclusion=False, skip_headers=False
+    ):
+        return "".join(
+            dfs(
+                self.parsed_html.body,
+                skip_categories=skip_categories,
+                skip_transclusion=skip_transclusion,
+                skip_headers=skip_headers,
+            )
+        )
