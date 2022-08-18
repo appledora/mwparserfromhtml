@@ -22,7 +22,9 @@ class Article:
         self.title = self.parsed_html.title.text
         self.address = self.parsed_html.find("link", {"rel": "dc:isVersionOf"})["href"]
         self.size = sys.getsizeof(html)
-
+        self.language = self.parsed_html.find("meta", {"http-equiv" : "content-language"})["content"]
+        self.page_namespace = self.parsed_html.find("base")["href"].split(".")[0].strip("//")
+    
     def __str__(self):
         """
         String representation of the Article class
@@ -77,7 +79,7 @@ class Article:
                 "rel": re.compile("mw:WikiLink")
             },  # using re.compile here because we also want to capture mw:WikiLink/interwiki
         )
-        return [Wikilink(w) for w in wikilinks]
+        return [Wikilink(w, self.page_namespace) for w in wikilinks]
 
     def get_categories(self) -> List[Category]:
         """

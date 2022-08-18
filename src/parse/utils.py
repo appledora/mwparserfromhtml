@@ -1,11 +1,8 @@
 import re
 from bs4 import Comment  # for parsing the HTML
-import re
+from .const import NAMESPACES
 
-_RE_COMBINE_WHITESPACE = re.compile(r"\s+")  # replace multiple newlines/spaces with one
-
-
-def is_comment(element):
+def is_comment(element) -> bool:
     return isinstance(element, Comment)
 
 
@@ -179,6 +176,15 @@ def check_transclusion(tag_string):
         return True
     return False
 
+def map_namespace(href, lang) -> int:
+    try: 
+        namespace = href.split(":")[0].strip("./").replace("_", " ")
+        namespace_id =  NAMESPACES[lang][namespace] 
+        return namespace_id
+    except Exception as e:
+        return 0
+
+    
 
 def identify_elements_(tag_string):
     """
