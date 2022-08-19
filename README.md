@@ -1,6 +1,6 @@
-# mwparserwithlove
+# mwparserfromhtml
 
-`mwparserwithlove` is a Python library for parsing and mining metadata from the Enterprise HTML Dumps that has been recently made available by the [Wikimedia Enterprise](https://enterprise.wikimedia.com/). The 6 most updated Enterprise HTML dumps can be accessed from [*this location*](https://dumps.wikimedia.org/other/enterprise_html/runs/). The aim of this library is to provide an interface to work with these html dumps and extract the most relevant features from an article.
+`mwparserfromhtml` is a Python library for parsing and mining metadata from the Enterprise HTML Dumps that has been recently made available by the [Wikimedia Enterprise](https://enterprise.wikimedia.com/). The 6 most updated Enterprise HTML dumps can be accessed from [*this location*](https://dumps.wikimedia.org/other/enterprise_html/runs/). The aim of this library is to provide an interface to work with these html dumps and extract the most relevant features from an article.
 
 Besides using the HTML dumps, users can also use the [Wikipedia API](https://en.wikipedia.org/api/rest_v1/#/Page%20content/get_page_html__title_) to obtain the HTML of a particular article from their title and parse the HTML string with this library.
 
@@ -18,10 +18,10 @@ However, parsing HTML to extract the necessary information is not a simple proce
 
 ## Installation
 
-You can install ``mwparserwithlove`` with ``pip``:
+You can install ``mwparserfromhtml`` with ``pip``:
 
 ```bash
-   $ pip install mwparserwithlove
+   $ pip install mwparserfromhtml
 ```
 
 ## Basic Usage 
@@ -29,7 +29,7 @@ You can install ``mwparserwithlove`` with ``pip``:
 * Import the dump module from the library and load the dump:
 
 ```python
-    from mwparserwithlove import dump
+    from mwparserfromhtml import dump
     html_file_path = "TARGZ_FILE_PATH"
     html_dump = mwp.dump.HTMLDump(html_file_path, max_article=150)
 ```
@@ -62,7 +62,7 @@ You can install ``mwparserwithlove`` with ``pip``:
 
 * Parse HTML string to extract metadata 
 ```python
-    from mwparserwithlove import parse
+    from mwparserfromhtml import parse
     html_string = "".join(open("FILE.html", "r").readlines())
     article = parse.Article(html_string)
     print(article.get_templates())
@@ -71,7 +71,7 @@ You can install ``mwparserwithlove`` with ``pip``:
 * Generate Summary Statistics of the dump:
 
 ```python
-    from mwparserwithlove import dump
+    from mwparserfromhtml import dump
     html_file_path = "TARGZ_FILE_PATH"
     html_dump = mwp.dump.HTMLDump(html_file_path, max_article=150)
     html_dump.generate_summary_stats()
