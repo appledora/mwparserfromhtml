@@ -68,7 +68,7 @@ You can install ``mwparserfromhtml`` with ``pip``:
     print(article.get_templates())
 ```
 
-* Generate Summary Statistics of the dump:
+* Generate summary statistics of the dump:
 
 ```python
     from mwparserfromhtml import dump
