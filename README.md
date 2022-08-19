@@ -60,7 +60,7 @@ You can install ``mwparserfromhtml`` with ``pip``:
         print(article.get_references())
 ```
 
-* Parse HTML string to extract metadata 
+* Parse HTML string of a Wikipedia article (in a file `FILE.html`) and extract features (such as templates) 
 ```python
     from mwparserfromhtml import parse
     html_string = "".join(open("FILE.html", "r").readlines())
