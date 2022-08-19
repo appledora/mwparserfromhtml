@@ -84,4 +84,4 @@ You can install ``mwparserfromhtml`` with ``pip``:
  
 ## Acknowledgements
 
-This project has benefited greatly from the work of Earwig ([mwparserfromhell]()) and Slavina Stefanova ([mwsql]()). 
+This project was started as part of an [Outreachy](https://www.outreachy.org/) internship from May--August 2022. This project has benefited greatly from the work of Earwig ([mwparserfromhell](https://github.com/earwig/mwparserfromhell)) and Slavina Stefanova ([mwsql](https://github.com/mediawiki-utilities/python-mwsql)). 
