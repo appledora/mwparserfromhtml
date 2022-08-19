@@ -12,7 +12,7 @@ However, parsing HTML to extract the necessary information is not a simple proce
 ## Features
 * Iterate over large tarballs of HTML dumps without extracting them to memory (memory efficient, but not subscriptable unless converted to a list)
 * Extract major article metadata like Category, Templates, Wikilinks, External Links, Media, References etc. with their respective type and status information
-* Smoothly extract the content of an article from the HTML dump and customizing the level of detail
+* Easily extract the content of an article from the HTML dump and customizing the level of detail
 * Generate Summary Statistics for the articles in the dump
 
 
