@@ -160,6 +160,9 @@ class Article:
             skip_categories : boolean. If true, the generated plaintext won't include Category titles. 
             skip_transclusions : boolean. If true, the generated plaintext won't include transcluded elements.
             skip_headers : boolean. If true, the generated plaintext won't include section headers.
+
+        Returns: 
+            str: the visible plaintext of an article.
         '''
         return "".join(
             dfs(
