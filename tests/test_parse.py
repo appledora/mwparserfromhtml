@@ -48,12 +48,15 @@ def test_get_wikilinks_one():
     number_of_disambiguations = 0
     number_of_interwikilinks = 0
     number_of_transclusions = 0
+    number_of_namespaces = {0:5, 12:1}
     test_redlink = 0
     test_disambiguation = 0
     test_redirect = 0
     test_transclusion = 0
     test_interwiki = 0
+    test_namespace = {}
     for item in test_wlink_objs:
+        test_namespace[item.namespace_id] = test_namespace.get(item.namespace_id, 0) + 1
         if item.redlink:
             test_redlink += 1
         if item.redirect:
@@ -70,6 +73,7 @@ def test_get_wikilinks_one():
     assert test_disambiguation == number_of_disambiguations
     assert test_interwiki == number_of_interwikilinks
     assert test_transclusion == number_of_transclusions
+    assert test_namespace == number_of_namespaces
 
 
 def test_get_wikilinks_two():
@@ -81,12 +85,15 @@ def test_get_wikilinks_two():
     number_of_disambiguations = 1
     number_of_interwikilinks = 1
     number_of_transclusions = 1
+    number_of_namespaces = {0:31}
     test_redlink = 0
     test_disambiguation = 0
     test_redirect = 0
     test_transclusion = 0
     test_interwiki = 0
+    test_namespace = {}
     for item in test_wlink_objs:
+        test_namespace[item.namespace_id] = test_namespace.get(item.namespace_id, 0) + 1
         if item.redlink:
             test_redlink += 1
         if item.redirect:
@@ -103,6 +110,7 @@ def test_get_wikilinks_two():
     assert test_disambiguation == number_of_disambiguations
     assert test_interwiki == number_of_interwikilinks
     assert test_transclusion == number_of_transclusions
+    assert test_namespace == number_of_namespaces
 
 
 def test_get_externallinks_one():
