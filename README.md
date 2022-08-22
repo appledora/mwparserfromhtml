@@ -78,10 +78,11 @@ You can install ``mwparserfromhtml`` with ``pip``:
     html_dump.generate_summary_stats()
 ```
 ## Project Information 
-- Licensing 
-- Issue Tracker 
-- Documentation 
-- Contribution Guidelines
+- [Licensing](https://gitlab.wikimedia.org/repos/research/html-dumps/-/blob/main/LICENSE)
+- [Repository](https://gitlab.wikimedia.org/repos/research/html-dumps)
+- [Issue Tracker](https://gitlab.wikimedia.org/repos/research/html-dumps/-/issues)
+<!-- - Documentation 
+- Contribution Guidelines -->
  
 ## Acknowledgements
 
