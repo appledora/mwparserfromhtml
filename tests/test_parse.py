@@ -1,5 +1,3 @@
-from cgi import test
-
 from context import Article, example_html_one, example_html_two
 
 
