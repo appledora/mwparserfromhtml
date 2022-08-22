@@ -42,7 +42,7 @@ You can install ``mwparserfromhtml`` with ``pip``:
         print(article.title)
 ```
 
-* Extract the content of an article from the dump:
+* Extract the plain text of an article from the dump, i.e. remove anything that is not text (e.g. a link is replaced by its [anchor text](Anchor_text)):
 
 ```python
     for article in html_dump:
