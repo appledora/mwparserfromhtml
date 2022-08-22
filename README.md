@@ -1,27 +1,28 @@
-# mwparserwithlove
+# mwparserfromhtml
 
-`mwparserwithlove` is a Python library for parsing and mining metadata from the Enterprise HTML Dumps that has been recently made available by the [Wikimedia Enterprise](https://enterprise.wikimedia.com/). The 6 most updated Enterprise HTML dumps can be accessed from [*this location*](https://dumps.wikimedia.org/other/enterprise_html/runs/). The aim of this library is to provide an interface to work with these html dumps and extract the most relevant features from an article.
+`mwparserfromhtml` is a Python library for parsing and mining metadata from the Enterprise HTML Dumps that has been recently made available by the [Wikimedia Enterprise](https://enterprise.wikimedia.com/). The 6 most updated Enterprise HTML dumps can be accessed from [*this location*](https://dumps.wikimedia.org/other/enterprise_html/runs/). The aim of this library is to provide an interface to work with these HTML dumps and extract the most relevant features from an article.
 
 Besides using the HTML dumps, users can also use the [Wikipedia API](https://en.wikipedia.org/api/rest_v1/#/Page%20content/get_page_html__title_) to obtain the HTML of a particular article from their title and parse the HTML string with this library.
 
 ## Motivation
-When rendering contents, MediaWiki converts wikitext to HTML, allowing for the expansion of macros to include more material. The HTML version of a Wikipedia page generally has more information than the original source wikitext . So, it's reasonable that academics who want to look at Wikipedia through the eyes of its users would prefer to work with HTML rather than wikitext. The introduction of the Enterprise HTML dumps somewhat mitigates the drawbacks of utilising wikitext for corpus development and other research. Researchers can now use HTML dumps (and they should). 
+When rendering contents, MediaWiki converts wikitext to HTML, allowing for the expansion of macros to include more material. The HTML version of a Wikipedia page generally has more information than the original source wikitext. So, it's reasonable that anyone who wants to analyze Wikipedia's content as it appears to its readers would prefer to work with HTML rather than wikitext. Traditionally, only the wikitext version has been available in the [XML-dumps](https://dumps.wikimedia.org/backup-index.html). Now, with the introduction of the Enterprise HTML dumps in 2021, anyone can now easily access and use HTML dumps (and they should). 
 
-However, parsing HTML to extract the necessary information is not a simple process. An inconspicuous user may know how to work with HTMLs but they might not be used to the specific format of the dump files. Also the wikitext translated to HTMLs by the MediaWiki API have many different edge-cases and requires heavy investigation of the documentation to get a grasp of the structure. Identifying the features from this HTML is no trivial task! Because of all these hassles, it is likely that individuals would continue working with wikitext as there are already ready-to-use parsers for it and consequently face the misrepresentation of information. This is why we provide an accessible HTML parser to decrease the technological barrier, so that more users may utilise this resource. 
+However, parsing HTML to extract the necessary information is not a simple process. An inconspicuous user may know how to work with HTMLs but they might not be used to the specific format of the dump files. Also the wikitext translated to HTMLs by the MediaWiki API have many different edge-cases and requires heavy investigation of the documentation to get a grasp of the structure. Identifying the features from this HTML is no trivial task! Because of all these hassles, it is likely that individuals would continue working with wikitext as there are already excellent ready-to-use parsers for it (such as [mwparserfromhell](https://github.com/earwig/mwparserfromhell)). 
+Therefore, we wanted to write a Python library that can efficiently parse the HTML-code of an article from the Wikimedia Enterprise dumps to extract relevant elements such as text, links, templates, etc. This will hopefully lower the technical barriers to work with the HTML-dumps and empower researchers and others to take advantage of this beneficial resource. 
 
 ## Features
 * Iterate over large tarballs of HTML dumps without extracting them to memory (memory efficient, but not subscriptable unless converted to a list)
 * Extract major article metadata like Category, Templates, Wikilinks, External Links, Media, References etc. with their respective type and status information
-* Smoothly extract the content of an article from the HTML dump and customizing the level of detail
-* Generate Summary Statistics for the articles in the dump
+* Easily extract the content of an article from the HTML dump and customizing the level of detail
+* Generate summary statistics for the articles in the dump
 
 
 ## Installation
 
-You can install ``mwparserwithlove`` with ``pip``:
+You can install ``mwparserfromhtml`` with ``pip``:
 
 ```bash
-   $ pip install mwparserwithlove
+   $ pip install mwparserfromhtml
 ```
 
 ## Basic Usage 
@@ -29,7 +30,7 @@ You can install ``mwparserwithlove`` with ``pip``:
 * Import the dump module from the library and load the dump:
 
 ```python
-    from mwparserwithlove import dump
+    from mwparserfromhtml import dump
     html_file_path = "TARGZ_FILE_PATH"
     html_dump = mwp.dump.HTMLDump(html_file_path, max_article=150)
 ```
@@ -60,18 +61,18 @@ You can install ``mwparserwithlove`` with ``pip``:
         print(article.get_references())
 ```
 
-* Parse HTML string to extract metadata 
+* Parse HTML string of a Wikipedia article (in a file `FILE.html`) and extract features (such as templates) 
 ```python
-    from mwparserwithlove import parse
+    from mwparserfromhtml import parse
     html_string = "".join(open("FILE.html", "r").readlines())
     article = parse.Article(html_string)
     print(article.get_templates())
 ```
 
-* Generate Summary Statistics of the dump:
+* Generate summary statistics of the dump:
 
 ```python
-    from mwparserwithlove import dump
+    from mwparserfromhtml import dump
     html_file_path = "TARGZ_FILE_PATH"
     html_dump = mwp.dump.HTMLDump(html_file_path, max_article=150)
     html_dump.generate_summary_stats()
@@ -84,4 +85,4 @@ You can install ``mwparserwithlove`` with ``pip``:
  
 ## Acknowledgements
 
-This project has benefited greatly from the work of Earwig ([mwparserfromhell]()) and Slavina Stefanova ([mwsql]()). 
+This project was started as part of an [Outreachy](https://www.outreachy.org/) internship from May--August 2022. This project has benefited greatly from the work of Earwig ([mwparserfromhell](https://github.com/earwig/mwparserfromhell)) and Slavina Stefanova ([mwsql](https://github.com/mediawiki-utilities/python-mwsql)). 
