@@ -152,6 +152,19 @@ class Article:
     def get_media(
         self, skip_images=False, skip_audio=False, skip_video=False
     ) -> List[Media]:
+
+        """
+        extract image, video and audio information from a Beautifulsoup object.
+        Media not appearing inside `img`, `video` or `audio` html  tag won't be
+        captured by this method.
+        Args: 
+            skip_images: boolean. If true doesn't include Image data. 
+            skip_audio: boolean. If true, doesn't include audio data. 
+            skip_video: boolean. If true, doesn't include video data.
+
+        Returns:
+            List[Media]: a list of media objects.
+        """
         media_objects = []
         if not skip_images:
             images = self.parsed_html.find_all("img")
