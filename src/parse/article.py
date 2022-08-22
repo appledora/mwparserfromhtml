@@ -151,7 +151,14 @@ class Article:
 
     def get_plaintext(
         self, skip_categories=False, skip_transclusion=False, skip_headers=False
-    ):
+    ) -> str:
+        '''
+        extract plaintext from the HTML object in a depth-first manner.
+        Args: 
+            skip_categories : boolean. If true, the generated plaintext won't include Category titles. 
+            skip_transclusions : boolean. If true, the generated plaintext won't include transcluded elements.
+            skip_headers : boolean. If true, the generated plaintext won't include section headers.
+        '''
         return "".join(
             dfs(
                 self.parsed_html.body,
