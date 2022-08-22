@@ -60,7 +60,6 @@ class HTMLDump:
         """
 
         source_path = filepath
-        print("Source path: ", source_path)
         tar_file_ = tarfile.open(source_path, mode="r:gz")
         count = 0
         if preference == "html":
@@ -74,7 +73,7 @@ class HTMLDump:
                                 return
                             article = json.loads(line)
                             count += 1
-                            yield Article(article["article_body"]["html"])
+                            yield Article(article)
                 else:
                     tar_file_.close()
                     return

@@ -1,11 +1,12 @@
 import ast
+import json
 import re
 import sys
 from bs4 import BeautifulSoup
 from typing import List
 
 from .elements import ExternalLink, Reference, Template, Wikilink, Category
-from .utils import is_comment, nested_value_extract, dfs
+from .utils import get_metadata, is_comment, nested_value_extract, dfs
 
 
 class Article:
@@ -13,23 +14,25 @@ class Article:
     Class file to create instance of a Wikipedia article from the dump
     """
 
-    def __init__(self, html: str) -> None:
+    def __init__(self, body: json) -> None:
         """
         Constructor for Article class
         """
-        self.raw_html = html
-        self.parsed_html = BeautifulSoup(html, "html.parser")
+        self.raw_html = body["article_body"]["html"]
+        self.wikitext = body["article_body"]["wikitext"]
+        self.parsed_html = BeautifulSoup(self.raw_html, "html.parser")
         self.title = self.parsed_html.title.text
         self.address = self.parsed_html.find("link", {"rel": "dc:isVersionOf"})["href"]
-        self.size = sys.getsizeof(html)
+        self.size = sys.getsizeof(self.raw_html)
         self.language = self.parsed_html.find("meta", {"http-equiv" : "content-language"})["content"]
         self.page_namespace = self.parsed_html.find("base")["href"].split(".")[0].strip("//")
+        self.metadata = get_metadata(body)
     
     def __str__(self):
         """
         String representation of the Article class
         """
-        return f"Article (title = {self.title}, size = {self.size})"
+        return f"Article (title = {self.title}, HTML size = {self.size}, additional dump metadata = {self.metadata})"
 
     def __repr__(self):
         return str(self)

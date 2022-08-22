@@ -247,3 +247,12 @@ def dfs(
         # Raw string -- output
         else:
             yield cnode.text
+
+
+def get_metadata(body):
+    NON_KEYS = ["article_body", "url", "namespace", "name", "in_language"]
+    metadata = {}
+    for k in body.keys():
+        if k not in NON_KEYS :
+            metadata[k] = body.get(k)
+    return metadata
