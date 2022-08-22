@@ -3,6 +3,8 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+from src.parse.article import Article
+
 # the pretty-print versions allow for easier inspection but include additional spaces that affect the tests
 # the real-world use-cases use the unstructured HTML string, so that is what should be imported for tests
 
