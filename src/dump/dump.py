@@ -1,12 +1,10 @@
 import json
 import os
-import sys
 import tarfile
 from pathlib import Path
 from typing import Any, Iterator, List, Optional, Union
 
-sys.path.append(".")
-from parse.article import Article
+from ..parse.article import Article
 
 PathObject = Union[str, Path]
 
