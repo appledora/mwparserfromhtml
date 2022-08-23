@@ -1,11 +1,7 @@
-import re
 from bs4 import Comment  # for parsing the HTML
-import re
+from .const import NAMESPACES
 
-_RE_COMBINE_WHITESPACE = re.compile(r"\s+")  # replace multiple newlines/spaces with one
-
-
-def is_comment(element):
+def is_comment(element) -> bool:
     return isinstance(element, Comment)
 
 
@@ -63,17 +59,6 @@ def nested_value_extract(key, var):
                     for result in nested_value_extract(key, d):
                         if result != "":
                             yield result
-
-
-def flatten_list(A):
-    rt = []
-    for i in A:
-        if isinstance(i, list):
-            rt.extend(flatten_list(i))
-        else:
-            if i.strip() != "":
-                rt.append(i)
-    return rt
 
 
 def title_normalization(link):
@@ -179,6 +164,18 @@ def check_transclusion(tag_string):
         return True
     return False
 
+def map_namespace(href, wiki_db) -> int:
+    """
+    returns the namespace id of a namespace type (i.e: article, talks etc.)
+    """
+    try: 
+        namespace_type = href.split(":")[0].strip("./").replace("_", " ")
+        namespace_id =  NAMESPACES[wiki_db][namespace_type] 
+        return namespace_id
+    except Exception as e:
+        return 0
+
+    
 
 def identify_elements_(tag_string):
     """
@@ -209,6 +206,7 @@ def dfs(
 ):
     """
     recursive depth-first search function to traverse the HTML tree
+    returns generator for plaintext of each node.
     """
     for cnode in parent_node.contents:
         if hasattr(cnode, "attrs"):  # if node has attributes, check the attributes
@@ -241,3 +239,15 @@ def dfs(
         # Raw string -- output
         else:
             yield cnode.text
+
+
+def get_metadata(body):
+    # the NON_KEYS array contains the keys which has already been defined
+    # within the article class by extracting directly from the HTML.
+    # That's why we don't redundantly include them in the metadata.
+    NON_KEYS = ["article_body", "url", "namespace", "name", "in_language"]
+    metadata = {}
+    for k in body.keys():
+        if k not in NON_KEYS :
+            metadata[k] = body.get(k)
+    return metadata

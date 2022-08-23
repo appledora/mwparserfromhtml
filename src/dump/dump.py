@@ -1,12 +1,10 @@
 import json
 import os
-import sys
 import tarfile
 from pathlib import Path
 from typing import Any, Iterator, List, Optional, Union
 
-sys.path.append(".")
-from parse.article import Article
+from ..parse.article import Article
 
 PathObject = Union[str, Path]
 
@@ -47,43 +45,32 @@ class HTMLDump:
         return self.read_dump_local(filepath=self.file_path, max_article=self.max_article)
 
     def read_dump_local(
-            self, filepath: str, max_article: int = -1, preference: str = "html"
+            self, filepath: str, max_article: int = -1
     ) -> Iterator[List[Any]]:
         """
         Reads a local dump file and returns an iterator of the rows.
         Args:
             filepath (str): path to the dump file
             max_article (int, optional): maximum number of articles to return. Defaults to -1, which means we will iterate over the entire dump file.
-            preference (str, optional): preference of the dump file. Defaults to "html".
         Returns:
             Iterator[List[Any]]: iterator of the rows
         """
 
         source_path = filepath
-        print("Source path: ", source_path)
         tar_file_ = tarfile.open(source_path, mode="r:gz")
         count = 0
-        if preference == "html":
-            while True:
-                html_fn = tar_file_.next()
-                if html_fn != None:
-                    with tar_file_.extractfile(html_fn) as file_input:
-                        for line in file_input:
-                            if count == max_article:
-                                tar_file_.close()
-                                return
-                            article = json.loads(line)
-                            count += 1
-                            yield Article(article["article_body"]["html"])
-                else:
-                    tar_file_.close()
-                    return
+        while True:
+            html_fn = tar_file_.next()
+            if html_fn != None:
+                with tar_file_.extractfile(html_fn) as file_input:
+                    for line in file_input:
+                        if count == max_article:
+                            tar_file_.close()
+                            return
+                        article = json.loads(line)
+                        count += 1
+                        yield Article(article)
+            else:
+                tar_file_.close()
+                return
 
-        elif preference == "feature":
-            pass
-
-    def read_dump_remote():
-        pass
-
-    def to_csv():
-        pass

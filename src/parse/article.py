@@ -1,11 +1,12 @@
 import ast
+import json
 import re
 import sys
 from bs4 import BeautifulSoup
 from typing import List
 
 from .elements import ExternalLink, Media, Reference, Template, Wikilink, Category
-from .utils import is_comment, nested_value_extract, dfs
+from .utils import get_metadata, is_comment, map_namespace, nested_value_extract, dfs
 
 
 class Article:
@@ -13,21 +14,26 @@ class Article:
     Class file to create instance of a Wikipedia article from the dump
     """
 
-    def __init__(self, html: str) -> None:
+    def __init__(self, body: json) -> None:
         """
         Constructor for Article class
         """
-        self.raw_html = html
-        self.parsed_html = BeautifulSoup(html, "html.parser")
+        self.raw_html = body["article_body"]["html"]
+        self.wikitext = body["article_body"]["wikitext"]
+        self.parsed_html = BeautifulSoup(self.raw_html, "html.parser")
         self.title = self.parsed_html.title.text
         self.address = self.parsed_html.find("link", {"rel": "dc:isVersionOf"})["href"]
-        self.size = sys.getsizeof(html)
-
+        self.size = sys.getsizeof(self.raw_html)
+        self.language = self.parsed_html.find("meta", {"http-equiv" : "content-language"})["content"]
+        self.page_namespace_id = self.parsed_html.find("meta", {"property": "mw:pageNamespace"})["content"]
+        self.wiki_db = self.parsed_html.find("base")["href"].split(".")[0].strip("//")
+        self.metadata = get_metadata(body)
+    
     def __str__(self):
         """
         String representation of the Article class
         """
-        return f"Article (title = {self.title}, size = {self.size})"
+        return f"Article (title = {self.title}, HTML size = {self.size}, additional dump metadata = {self.metadata})"
 
     def __repr__(self):
         return str(self)
@@ -77,7 +83,7 @@ class Article:
                 "rel": re.compile("mw:WikiLink")
             },  # using re.compile here because we also want to capture mw:WikiLink/interwiki
         )
-        return [Wikilink(w) for w in wikilinks]
+        return [Wikilink(w, self.wiki_db) for w in wikilinks]
 
     def get_categories(self) -> List[Category]:
         """
@@ -212,7 +218,17 @@ class Article:
         return media_objects
     def get_plaintext(
         self, skip_categories=False, skip_transclusion=False, skip_headers=False
-    ):
+    ) -> str:
+        '''
+        extract plaintext from the HTML object in a depth-first manner.
+        Args: 
+            skip_categories : boolean. If true, the generated plaintext won't include Category titles. 
+            skip_transclusions : boolean. If true, the generated plaintext won't include transcluded elements.
+            skip_headers : boolean. If true, the generated plaintext won't include section headers.
+
+        Returns: 
+            str: the visible plaintext of an article.
+        '''
         return "".join(
             dfs(
                 self.parsed_html.body,
