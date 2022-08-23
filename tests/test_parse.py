@@ -12,7 +12,6 @@ def test_get_headings_two():
     expected_headers = ["Life", "References"]
     assert article.get_headers() == expected_headers
 
-
 def test_get_sections_one():
     article = Article(example_html_one)
     number_of_expected_sections = 1

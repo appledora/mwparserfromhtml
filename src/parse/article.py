@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from typing import List
 
 from .elements import ExternalLink, Reference, Template, Wikilink, Category
-from .utils import get_metadata, is_comment, nested_value_extract, dfs
+from .utils import get_metadata, is_comment, map_namespace, nested_value_extract, dfs
 
 
 class Article:
@@ -25,6 +25,7 @@ class Article:
         self.address = self.parsed_html.find("link", {"rel": "dc:isVersionOf"})["href"]
         self.size = sys.getsizeof(self.raw_html)
         self.language = self.parsed_html.find("meta", {"http-equiv" : "content-language"})["content"]
+        self.page_namespace_id = self.parsed_html.find("meta", {"property": "mw:pageNamespace"})["content"]
         self.page_namespace = self.parsed_html.find("base")["href"].split(".")[0].strip("//")
         self.metadata = get_metadata(body)
     

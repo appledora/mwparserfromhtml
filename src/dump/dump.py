@@ -71,7 +71,7 @@ class HTMLDump:
                             return
                         article = json.loads(line)
                         count += 1
-                        yield Article(article["article_body"]["html"])
+                        yield Article(article)
             else:
                 tar_file_.close()
                 return
