@@ -32,7 +32,7 @@ setup(
     long_description_content_type="text/markdown",
     long_description=long_description,
     packages=find_packages(),
-    install_requires=['bs4'],
+    install_requires=['beautifulsoup4', 'requests'],
     keywords=['python', 'wikipedia', 'html'],
     classifiers=[
         "Development Status :: 4 - Beta",
