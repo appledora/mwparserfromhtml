@@ -26,7 +26,7 @@ class Article:
         self.size = sys.getsizeof(self.raw_html)
         self.language = self.parsed_html.find("meta", {"http-equiv" : "content-language"})["content"]
         self.page_namespace_id = self.parsed_html.find("meta", {"property": "mw:pageNamespace"})["content"]
-        self.page_namespace = self.parsed_html.find("base")["href"].split(".")[0].strip("//")
+        self.primary_namespace = self.parsed_html.find("base")["href"].split(".")[0].strip("//")
         self.metadata = get_metadata(body)
     
     def __str__(self):
@@ -83,7 +83,7 @@ class Article:
                 "rel": re.compile("mw:WikiLink")
             },  # using re.compile here because we also want to capture mw:WikiLink/interwiki
         )
-        return [Wikilink(w, self.page_namespace) for w in wikilinks]
+        return [Wikilink(w, self.primary_namespace) for w in wikilinks]
 
     def get_categories(self) -> List[Category]:
         """
