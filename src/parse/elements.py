@@ -145,13 +145,13 @@ class Media(Element):
             media_type: if the value is one, it represents an image object. Otherwise, it can be audio or video. 
         """
         super().__init__(html_string)
+        self.title = html_string["resource"].split(":")[-1]
+        self.extension = self.title.split(".")[-1]
         self.caption = caption
         if media_type == 1:
-            self.title = html_string["alt"] if html_string.has_attr("alt") else ""
+            self.alt_text = html_string["alt"] if html_string.has_attr("alt") else ""
             self.link = html_string["src"]
-            self.extension = html_string["src"].split(".")[-1]
             
         else:
             sources_tag = html_string.find_all("source")
             self.link = [tag["src"] for tag in sources_tag]
-            self.extension = [link.split(".")[-1] for link in self.link]        
