@@ -5,7 +5,7 @@ import sys
 from bs4 import BeautifulSoup
 from typing import List
 
-from .elements import ExternalLink, Reference, Template, Wikilink, Category
+from .elements import ExternalLink, Media, Reference, Template, Wikilink, Category
 from .utils import get_metadata, is_comment, map_namespace, nested_value_extract, dfs
 
 
@@ -155,6 +155,67 @@ class Article:
         )
         return [Reference(r) for r in references]
 
+    def get_media(
+        self, skip_images=False, skip_audio=False, skip_video=False
+    ) -> List[Media]:
+
+        """
+        extract image, video and audio information from a Beautifulsoup object.
+        Media not appearing inside `img`, `video` or `audio` html  tag won't be
+        captured by this method.
+        Args: 
+            skip_images: boolean. If true doesn't include Image data. 
+            skip_audio: boolean. If true, doesn't include audio data. 
+            skip_video: boolean. If true, doesn't include video data.
+
+        Returns:
+            List[Media]: a list of media objects.
+        """
+        media_objects = []
+        if not skip_images:
+            images = self.parsed_html.find_all("img")
+            image_captions = []
+            for im in images:
+                image_captions.append(
+                    im.parent.parent.find("figcaption").text
+                    if im.parent.parent.find("figcaption")
+                    else ""
+                )
+            media_objects.extend(
+                [
+                    Media(html_string=m[0], media_type=1, caption=m[1])
+                    for m in zip(images, image_captions)
+                ]
+            )
+
+        if not skip_audio:
+            audio = self.parsed_html.find_all("audio")
+            audio_captions = []
+
+            for im in audio:
+                audio_captions.append(
+                    im.parent.parent.find("figcaption").text
+                    if im.parent.parent.find("figcaption")
+                    else ""
+                )
+            media_objects.extend(
+                [
+                    Media(html_string=m[0], caption=m[1])
+                    for m in zip(audio, audio_captions)
+                ]
+            )
+        if not skip_video:
+            video = self.parsed_html.find_all("video")
+            video_captions = []
+            for im in video:
+                video_captions.append(
+                    im.parent.parent.find("figcaption").get_text()
+                    if im.parent.parent.find("figcaption")
+                    else ""
+                )
+            media_objects.extend([Media(html_string=m[0], caption=m[1]) for m in zip(video, video_captions)])
+
+        return media_objects
     def get_plaintext(
         self, skip_categories=False, skip_transclusion=False, skip_headers=False
     ) -> str:
