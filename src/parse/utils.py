@@ -164,13 +164,13 @@ def check_transclusion(tag_string):
         return True
     return False
 
-def map_namespace(href, namespace) -> int:
+def map_namespace(href, wiki_db) -> int:
     """
     returns the namespace id of a namespace type (i.e: article, talks etc.)
     """
     try: 
         namespace_type = href.split(":")[0].strip("./").replace("_", " ")
-        namespace_id =  NAMESPACES[namespace][namespace_type] 
+        namespace_id =  NAMESPACES[wiki_db][namespace_type] 
         return namespace_id
     except Exception as e:
         return 0
@@ -239,3 +239,15 @@ def dfs(
         # Raw string -- output
         else:
             yield cnode.text
+
+
+def get_metadata(body):
+    # the NON_KEYS array contains the keys which has already been defined
+    # within the article class by extracting directly from the HTML.
+    # That's why we don't redundantly include them in the metadata.
+    NON_KEYS = ["article_body", "url", "namespace", "name", "in_language"]
+    metadata = {}
+    for k in body.keys():
+        if k not in NON_KEYS :
+            metadata[k] = body.get(k)
+    return metadata
