@@ -242,6 +242,9 @@ def dfs(
 
 
 def get_metadata(body):
+    # the NON_KEYS array contains the keys which has already been defined
+    # within the article class by extracting directly from the HTML.
+    # That's why we don't redundantly include them in the metadata.
     NON_KEYS = ["article_body", "url", "namespace", "name", "in_language"]
     metadata = {}
     for k in body.keys():
