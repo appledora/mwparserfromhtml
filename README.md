@@ -30,9 +30,9 @@ You can install ``mwparserfromhtml`` with ``pip``:
 * Import the dump module from the library and load the dump:
 
 ```python
-    from mwparserfromhtml import dump
+    from mwparserfromhtml import HTMLDump
     html_file_path = "TARGZ_FILE_PATH"
-    html_dump = mwp.dump.HTMLDump(html_file_path, max_article=150)
+    html_dump = HTMLDump(html_file_path, max_article=150)
 ```
 
 * Iterate over the articles in the dump:
@@ -63,20 +63,20 @@ You can install ``mwparserfromhtml`` with ``pip``:
 
 * Parse HTML string of a Wikipedia article (in a file `FILE.html`) and extract features (such as templates) 
 ```python
-    from mwparserfromhtml import parse
+    from mwparserfromhtml import Article
     html_string = "".join(open("FILE.html", "r").readlines())
-    article = parse.Article(html_string)
+    article = Article(html_string)
     print(article.get_templates())
 ```
 
-* Generate summary statistics of the dump:
+<!-- * Generate summary statistics of the dump:
 
 ```python
-    from mwparserfromhtml import dump
+    from mwparserfromhtml import HTMLDump
     html_file_path = "TARGZ_FILE_PATH"
-    html_dump = mwp.dump.HTMLDump(html_file_path, max_article=150)
+    html_dump = HTMLDump(html_file_path, max_article=150)
     html_dump.generate_summary_stats()
-```
+``` -->
 ## Project Information 
 - [Licensing](https://gitlab.wikimedia.org/repos/research/html-dumps/-/blob/main/LICENSE)
 - [Repository](https://gitlab.wikimedia.org/repos/research/html-dumps)
