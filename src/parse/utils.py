@@ -1,6 +1,7 @@
 from bs4 import Comment  # for parsing the HTML
 from .const import NAMESPACES
 
+
 def is_comment(element) -> bool:
     return isinstance(element, Comment)
 
@@ -164,18 +165,18 @@ def check_transclusion(tag_string):
         return True
     return False
 
+
 def map_namespace(href, wiki_db) -> int:
     """
     returns the namespace id of a namespace type (i.e: article, talks etc.)
     """
-    try: 
+    try:
         namespace_type = href.split(":")[0].strip("./").replace("_", " ")
-        namespace_id =  NAMESPACES[wiki_db][namespace_type] 
+        namespace_id = NAMESPACES[wiki_db][namespace_type]
         return namespace_id
     except Exception as e:
         return 0
 
-    
 
 def identify_elements_(tag_string):
     """
@@ -248,6 +249,6 @@ def get_metadata(body):
     NON_KEYS = ["article_body", "url", "namespace", "name", "in_language"]
     metadata = {}
     for k in body.keys():
-        if k not in NON_KEYS :
+        if k not in NON_KEYS:
             metadata[k] = body.get(k)
     return metadata

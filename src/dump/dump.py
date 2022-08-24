@@ -14,7 +14,9 @@ class HTMLDump:
     Class file to create instances of Wikimedia Enterprise HTML Dumps
     """
 
-    def __init__(self, filepath: str, encoding: Optional[str] = "utf-8", max_article: int = 100) -> None:
+    def __init__(
+        self, filepath: str, encoding: Optional[str] = "utf-8", max_article: int = 100
+    ) -> None:
         """
         Contructor for HTMLDump class
         Args:
@@ -42,10 +44,12 @@ class HTMLDump:
         """
         Iterator of the Article class
         """
-        return self.read_dump_local(filepath=self.file_path, max_article=self.max_article)
+        return self.read_dump_local(
+            filepath=self.file_path, max_article=self.max_article
+        )
 
     def read_dump_local(
-            self, filepath: str, max_article: int = -1
+        self, filepath: str, max_article: int = -1
     ) -> Iterator[List[Any]]:
         """
         Reads a local dump file and returns an iterator of the rows.
@@ -73,4 +77,3 @@ class HTMLDump:
             else:
                 tar_file_.close()
                 return
-

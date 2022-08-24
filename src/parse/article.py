@@ -24,11 +24,15 @@ class Article:
         self.title = self.parsed_html.title.text
         self.address = self.parsed_html.find("link", {"rel": "dc:isVersionOf"})["href"]
         self.size = sys.getsizeof(self.raw_html)
-        self.language = self.parsed_html.find("meta", {"http-equiv" : "content-language"})["content"]
-        self.page_namespace_id = self.parsed_html.find("meta", {"property": "mw:pageNamespace"})["content"]
+        self.language = self.parsed_html.find(
+            "meta", {"http-equiv": "content-language"}
+        )["content"]
+        self.page_namespace_id = self.parsed_html.find(
+            "meta", {"property": "mw:pageNamespace"}
+        )["content"]
         self.wiki_db = self.parsed_html.find("base")["href"].split(".")[0].strip("//")
         self.metadata = get_metadata(body)
-    
+
     def __str__(self):
         """
         String representation of the Article class
@@ -45,6 +49,13 @@ class Article:
             str: raw html code of the article
         """
         return self.raw_html
+
+    def get_wikitext(self) -> str:
+        """
+        Returns:
+            str: wikitext code of the article
+        """
+        return self.wikitext
 
     def get_comments(self) -> List[str]:
         """
@@ -163,15 +174,17 @@ class Article:
         extract image, video and audio information from a Beautifulsoup object.
         Media not appearing inside `img`, `video` or `audio` html  tag won't be
         captured by this method.
-        Args: 
-            skip_images: boolean. If true doesn't include Image data. 
-            skip_audio: boolean. If true, doesn't include audio data. 
+        Args:
+            skip_images: boolean. If true doesn't include Image data.
+            skip_audio: boolean. If true, doesn't include audio data.
             skip_video: boolean. If true, doesn't include video data.
 
         Returns:
             List[Media]: a list of media objects.
         """
         media_objects = []
+        # captions are not consistent for media files, that's why we can
+        # only extract them if they exist in parent tags
         if not skip_images:
             images = self.parsed_html.find_all("img")
             image_captions = []
@@ -213,22 +226,28 @@ class Article:
                     if im.parent.parent.find("figcaption")
                     else ""
                 )
-            media_objects.extend([Media(html_string=m[0], caption=m[1]) for m in zip(video, video_captions)])
+            media_objects.extend(
+                [
+                    Media(html_string=m[0], caption=m[1])
+                    for m in zip(video, video_captions)
+                ]
+            )
 
         return media_objects
+
     def get_plaintext(
         self, skip_categories=False, skip_transclusion=False, skip_headers=False
     ) -> str:
-        '''
+        """
         extract plaintext from the HTML object in a depth-first manner.
-        Args: 
-            skip_categories : boolean. If true, the generated plaintext won't include Category titles. 
+        Args:
+            skip_categories : boolean. If true, the generated plaintext won't include Category titles.
             skip_transclusions : boolean. If true, the generated plaintext won't include transcluded elements.
             skip_headers : boolean. If true, the generated plaintext won't include section headers.
 
-        Returns: 
+        Returns:
             str: the visible plaintext of an article.
-        '''
+        """
         return "".join(
             dfs(
                 self.parsed_html.body,

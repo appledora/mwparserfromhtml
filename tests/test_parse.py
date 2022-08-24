@@ -12,6 +12,7 @@ def test_get_headings_two():
     expected_headers = ["Life", "References"]
     assert article.get_headers() == expected_headers
 
+
 def test_get_sections_one():
     article = Article(example_html_one)
     number_of_expected_sections = 1
@@ -45,7 +46,7 @@ def test_get_wikilinks_one():
     number_of_disambiguations = 0
     number_of_interwikilinks = 0
     number_of_transclusions = 0
-    number_of_namespaces = {0:5, 12:1}
+    number_of_namespaces = {0: 5, 12: 1}
     test_redlink = 0
     test_disambiguation = 0
     test_redirect = 0
@@ -82,7 +83,7 @@ def test_get_wikilinks_two():
     number_of_disambiguations = 1
     number_of_interwikilinks = 1
     number_of_transclusions = 1
-    number_of_namespaces = {0:31}
+    number_of_namespaces = {0: 31}
     test_redlink = 0
     test_disambiguation = 0
     test_redirect = 0
@@ -226,6 +227,7 @@ def test_get_media_one():
     article = Article(example_html_one)
     number_of_expected_media = 1
     assert len(article.get_media()) == number_of_expected_media
+
 
 def test_get_media_two():
     article = Article(example_html_two)
