@@ -26,6 +26,7 @@ You can install ``mwparserfromhtml`` with ``pip``:
 ```
 
 ## Basic Usage 
+Check out [`example_notebook.ipynb`](docs/tutorials/example_notebook.ipynb) to have a runnable example. 
 
 * Import the dump module from the library and load the dump:
 
@@ -42,7 +43,7 @@ You can install ``mwparserfromhtml`` with ``pip``:
         print(article.title)
 ```
 
-* Extract the plain text of an article from the dump, i.e. remove anything that is not text (e.g. a link is replaced by its [anchor text](Anchor_text)):
+* Extract the plain text of an article from the dump, i.e. remove anything that is not text (e.g. a link is replaced by its [anchor text](https://en.wikipedia.org/wiki/Anchor_text)):
 
 ```python
     for article in html_dump:
@@ -56,17 +57,21 @@ You can install ``mwparserfromhtml`` with ``pip``:
         print(article.get_templates())
         print(article.get_categories())
         print(article.get_wikilinks())
-        print(article.get_external_links())
+        print(article.get_externallinks())
         print(article.get_media(skip_images=True, skip_video=False, skip_audio=False))
         print(article.get_references())
 ```
 
-* Parse HTML string of a Wikipedia article (in a file `FILE.html`) and extract features (such as templates) 
+* Alternatively, you can read stand-alone html files obtained from the wikipedia dump and convert to an `Article` object to extract the features 
 ```python
     from mwparserfromhtml import Article
-    html_string = "".join(open("FILE.html", "r").readlines())
-    article = Article(html_string)
-    print(article.get_templates())
+    import json
+    article_object = json.load( open( "/home/appledora/Documents/wikimedia/html-dumps/data/article.json" )) 
+    article = Article(article_object)
+    print("Article Name: ", article.title)
+    templates = article.get_templates()
+    categories = article.get_categories()
+    wikilinks = article.get_wikilinks()
 ```
 
 <!-- * Generate summary statistics of the dump:
