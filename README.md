@@ -87,6 +87,7 @@ Check out [`example_notebook.ipynb`](docs/tutorials/example_notebook.ipynb) to h
 - [Repository](https://gitlab.wikimedia.org/repos/research/html-dumps)
 - [Issue Tracker](https://gitlab.wikimedia.org/repos/research/html-dumps/-/issues)
 - [Contribution Guidelines](CONTRIBUTION.md)
+- [Tutorials](docs/tutorials)
 
 ## Acknowledgements
 
