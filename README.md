@@ -5,10 +5,10 @@
 Besides using the HTML dumps, users can also use the [Wikipedia API](https://en.wikipedia.org/api/rest_v1/#/Page%20content/get_page_html__title_) to obtain the HTML of a particular article from their title and parse the HTML string with this library.
 
 ## Motivation
-When rendering contents, MediaWiki converts wikitext to HTML, allowing for the expansion of macros to include more material. The HTML version of a Wikipedia page generally has more information than the original source wikitext. So, it's reasonable that anyone who wants to analyze Wikipedia's content as it appears to its readers would prefer to work with HTML rather than wikitext. Traditionally, only the wikitext version has been available in the [XML-dumps](https://dumps.wikimedia.org/backup-index.html). Now, with the introduction of the Enterprise HTML dumps in 2021, anyone can now easily access and use HTML dumps (and they should). 
+When rendering contents, MediaWiki converts wikitext to HTML, allowing for the expansion of macros to include more material. The HTML version of a Wikipedia page generally has more information than the original source wikitext. So, it's reasonable that anyone who wants to analyze Wikipedia's content as it appears to its readers would prefer to work with HTML rather than wikitext. Traditionally, only the wikitext version has been available in the [XML-dumps](https://dumps.wikimedia.org/backup-index.html). Now, with the introduction of the Enterprise HTML dumps in 2021, anyone can now easily access and use HTML dumps (and they should).
 
-However, parsing HTML to extract the necessary information is not a simple process. An inconspicuous user may know how to work with HTMLs but they might not be used to the specific format of the dump files. Also the wikitext translated to HTMLs by the MediaWiki API have many different edge-cases and requires heavy investigation of the documentation to get a grasp of the structure. Identifying the features from this HTML is no trivial task! Because of all these hassles, it is likely that individuals would continue working with wikitext as there are already excellent ready-to-use parsers for it (such as [mwparserfromhell](https://github.com/earwig/mwparserfromhell)). 
-Therefore, we wanted to write a Python library that can efficiently parse the HTML-code of an article from the Wikimedia Enterprise dumps to extract relevant elements such as text, links, templates, etc. This will hopefully lower the technical barriers to work with the HTML-dumps and empower researchers and others to take advantage of this beneficial resource. 
+However, parsing HTML to extract the necessary information is not a simple process. An inconspicuous user may know how to work with HTMLs but they might not be used to the specific format of the dump files. Also the wikitext translated to HTMLs by the MediaWiki API have many different edge-cases and requires heavy investigation of the documentation to get a grasp of the structure. Identifying the features from this HTML is no trivial task! Because of all these hassles, it is likely that individuals would continue working with wikitext as there are already excellent ready-to-use parsers for it (such as [mwparserfromhell](https://github.com/earwig/mwparserfromhell)).
+Therefore, we wanted to write a Python library that can efficiently parse the HTML-code of an article from the Wikimedia Enterprise dumps to extract relevant elements such as text, links, templates, etc. This will hopefully lower the technical barriers to work with the HTML-dumps and empower researchers and others to take advantage of this beneficial resource.
 
 ## Features
 * Iterate over large tarballs of HTML dumps without extracting them to memory (memory efficient, but not subscriptable unless converted to a list)
@@ -25,8 +25,8 @@ You can install ``mwparserfromhtml`` with ``pip``:
    $ pip install mwparserfromhtml
 ```
 
-## Basic Usage 
-Check out [`example_notebook.ipynb`](docs/tutorials/example_notebook.ipynb) to have a runnable example. 
+## Basic Usage
+Check out [`example_notebook.ipynb`](docs/tutorials/example_notebook.ipynb) to have a runnable example.
 
 * Import the dump module from the library and load the dump:
 
@@ -62,11 +62,11 @@ Check out [`example_notebook.ipynb`](docs/tutorials/example_notebook.ipynb) to h
         print(article.get_references())
 ```
 
-* Alternatively, you can read stand-alone html files obtained from the wikipedia dump and convert to an `Article` object to extract the features 
+* Alternatively, you can read stand-alone html files obtained from the wikipedia dump and convert to an `Article` object to extract the features
 ```python
     from mwparserfromhtml import Article
     import json
-    article_object = json.load( open( "/home/appledora/Documents/wikimedia/html-dumps/data/article.json" )) 
+    article_object = json.load( open( "/home/appledora/Documents/wikimedia/html-dumps/data/article.json" ))
     article = Article(article_object)
     print("Article Name: ", article.title)
     templates = article.get_templates()
@@ -82,13 +82,13 @@ Check out [`example_notebook.ipynb`](docs/tutorials/example_notebook.ipynb) to h
     html_dump = HTMLDump(html_file_path, max_article=150)
     html_dump.generate_summary_stats()
 ``` -->
-## Project Information 
+## Project Information
 - [Licensing](https://gitlab.wikimedia.org/repos/research/html-dumps/-/blob/main/LICENSE)
 - [Repository](https://gitlab.wikimedia.org/repos/research/html-dumps)
 - [Issue Tracker](https://gitlab.wikimedia.org/repos/research/html-dumps/-/issues)
-<!-- - Documentation 
+<!-- - Documentation
 - Contribution Guidelines -->
- 
+
 ## Acknowledgements
 
-This project was started as part of an [Outreachy](https://www.outreachy.org/) internship from May--August 2022. This project has benefited greatly from the work of Earwig ([mwparserfromhell](https://github.com/earwig/mwparserfromhell)) and Slavina Stefanova ([mwsql](https://github.com/mediawiki-utilities/python-mwsql)). 
+This project was started as part of an [Outreachy](https://www.outreachy.org/) internship from May--August 2022. This project has benefited greatly from the work of Earwig ([mwparserfromhell](https://github.com/earwig/mwparserfromhell)) and Slavina Stefanova ([mwsql](https://github.com/mediawiki-utilities/python-mwsql)).

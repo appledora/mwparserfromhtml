@@ -1,12 +1,12 @@
 import ast
-import json
 import re
 import sys
-from bs4 import BeautifulSoup
-from typing import List
+import typing
 
-from .elements import ExternalLink, Media, Reference, Template, Wikilink, Category
-from .utils import get_metadata, is_comment, map_namespace, nested_value_extract, dfs
+from bs4 import BeautifulSoup
+
+from .elements import Category, ExternalLink, Media, Reference, Template, Wikilink
+from .utils import dfs, get_metadata, is_comment, nested_value_extract
 
 
 class Article:
@@ -14,7 +14,7 @@ class Article:
     Class file to create instance of a Wikipedia article from the dump
     """
 
-    def __init__(self, body: json) -> None:
+    def __init__(self, body) -> None:
         """
         Constructor for Article class
         """
@@ -37,7 +37,9 @@ class Article:
         """
         String representation of the Article class
         """
-        return f"Article (title = {self.title}, HTML size = {self.size}, additional dump metadata = {self.metadata})"
+        return f"""Article (title = {self.title},
+        HTML size = {self.size},
+        additional dump metadata = {self.metadata})"""
 
     def __repr__(self):
         return str(self)
@@ -57,35 +59,35 @@ class Article:
         """
         return self.wikitext
 
-    def get_comments(self) -> List[str]:
+    def get_comments(self) -> typing.List[str]:
         """
         extract the comments from a BeautifulSoup object.
         Returns:
-            List[str]: list of comments
+            typing.List[str]: list of comments
         """
         return self.parsed_html.find_all(text=is_comment)
 
-    def get_headers(self) -> List[str]:
+    def get_headers(self) -> typing.List[str]:
         """
         extract the headers from a BeautifulSoup object.
         Returns:
-            List[str]: list of headers
+            typing.List[str]: list of headers
         """
         return [h.text for h in self.parsed_html.find_all(re.compile("^h[1-6]$"))]
 
-    def get_sections(self) -> List[str]:
+    def get_sections(self) -> typing.List[str]:
         """
         extract the article sections from a BeautifulSoup object.
         Returns:
-            List[str]: list of section names
+            typing.List[str]: list of section names
         """
         return [section.get_text() for section in self.parsed_html.find_all("section")]
 
-    def get_wikilinks(self) -> List[Wikilink]:
+    def get_wikilinks(self) -> typing.List[Wikilink]:
         """
         extract wikilinks from a BeautifulSoup object.
         Returns:
-            List[Wikilink]: list of wikilinks
+            typing.List[Wikilink]: list of wikilinks
         """
         tag = "a"
         wikilinks = self.parsed_html.find_all(
@@ -96,11 +98,11 @@ class Article:
         )
         return [Wikilink(w, self.wiki_db) for w in wikilinks]
 
-    def get_categories(self) -> List[Category]:
+    def get_categories(self) -> typing.List[Category]:
         """
         extract categories from a BeautifulSoup object.
         Returns:
-            List[Category]: list of categories
+            typing.List[Category]: list of categories
         """
         tag = "link"
         categories = self.parsed_html.find_all(
@@ -108,11 +110,11 @@ class Article:
         )
         return [Category(c) for c in categories]
 
-    def get_externallinks(self) -> List[ExternalLink]:
+    def get_externallinks(self) -> typing.List[ExternalLink]:
         """
         extract external links from a BeautifulSoup object.
         Returns:
-            List[ExternalLink]: list of external links
+            typing.List[ExternalLink]: list of external links
         """
         tag = "a"
         externallinks = self.parsed_html.find_all(
@@ -120,11 +122,11 @@ class Article:
         )
         return [ExternalLink(e) for e in externallinks]
 
-    def get_templates(self) -> List[Template]:
+    def get_templates(self) -> typing.List[Template]:
         """
         extract templates from a BeautifulSoup object.
         Returns:
-            List[Template]: list of templates
+            typing.List[Template]: list of templates
         """
 
         # function to extract template with data-mw attribute that contains dictionary with "parts" key
@@ -144,7 +146,9 @@ class Article:
                     nested_value_extract("template", ast.literal_eval(temp["data-mw"]))
                 )
                 if len(template_item) != 0:
-                    # we have to use a loop because there may be multiple "template" keys in the nested dictionary
+                    # we have to use a loop because
+                    # there may be multiple "template" keys
+                    # in the nested dictionary
                     for item in template_item:
                         template_values.append(
                             (temp, item["target"])
@@ -154,11 +158,11 @@ class Article:
 
         return [Template(t[0], t[1]) for t in template_values]
 
-    def get_references(self) -> List[Reference]:
+    def get_references(self) -> typing.List[Reference]:
         """
         extract references from a BeautifulSoup object.
         Returns:
-            List[str]: list of references
+            typing.List[str]: list of references
         """
         tag = "span"
         references = self.parsed_html.find_all(
@@ -168,7 +172,7 @@ class Article:
 
     def get_media(
         self, skip_images=False, skip_audio=False, skip_video=False
-    ) -> List[Media]:
+    ) -> typing.List[Media]:
 
         """
         extract image, video and audio information from a Beautifulsoup object.
@@ -180,7 +184,7 @@ class Article:
             skip_video: boolean. If true, doesn't include video data.
 
         Returns:
-            List[Media]: a list of media objects.
+            typing.List[Media]: a list of media objects.
         """
         media_objects = []
         # captions are not consistent for media files, that's why we can
@@ -256,4 +260,3 @@ class Article:
                 skip_headers=skip_headers,
             )
         )
- 

@@ -1,10 +1,5 @@
-from .utils import check_transclusion, get_tid, map_namespace, title_normalization
 from .const import _RE_COMBINE_WHITESPACE
-from .utils import (
-    check_transclusion,
-    get_tid,
-    title_normalization,
-)
+from .utils import check_transclusion, get_tid, map_namespace, title_normalization
 
 
 class Element:
@@ -61,7 +56,8 @@ class Wikilink(Element):
 
 class ExternalLink(Element):
     """
-    Instantiates an ExternalLink object from HTML string. The ExternalLink object contains the following attributes:
+    Instantiates an ExternalLink object from HTML string.
+    The ExternalLink object contains the following attributes:
     - autolinked: boolean, True if the external link is not a numbered or a named link
     - numbered: boolean, True if the external link is a numbered link
     - named: boolean, True if the external link is a named link
@@ -123,13 +119,15 @@ class Template(Element):
 
 class Reference(Element):
     """
-    Instantiates a References object from HTML string. The References object contains the following attributes:
+    Instantiates a References object from HTML string.
+    The References object contains the following attributes:
     """
 
     def __init__(self, html_string):
         """
         Args:
-            html_string: an HTML string or a BeautifulSoup Tag object. Reference objects include the following attribute:
+            html_string: an HTML string or a BeautifulSoup Tag object.
+            Reference objects include the following attribute:
             - ref_id: the id of the reference, that can be used to connect it with the place of reference
         """
         super().__init__(html_string)
@@ -148,7 +146,8 @@ class Media(Element):
         """
         Args:
             html_string: an HTML string or a BeautifulSoup Tag object.
-            media_type: if the value is one, it represents an image object. Otherwise, it can be audio or video.
+            media_type: if the value is one, it represents an image object.
+            Otherwise, it can be audio or video.
         """
         super().__init__(html_string)
         self.title = html_string["resource"].split(":")[-1]

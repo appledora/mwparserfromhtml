@@ -1,23 +1,28 @@
-from setuptools import setup, find_packages
 import codecs
 import os
+
+from setuptools import find_packages, setup
 
 here = os.path.abspath(os.path.dirname(__file__))
 
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
-VERSION = '0.0.4'
-DESCRIPTION = 'Wikipedia HTML Dump Parsing'
-LONG_DESCRIPTION = 'A package that supports plaintext and object extraction from Wikipedia HTML dumps.'
+VERSION = "0.0.4"
+DESCRIPTION = "Wikipedia HTML Dump Parsing"
+LONG_DESCRIPTION = (
+    "A package that supports plaintext and object extraction from Wikipedia HTML dumps."
+)
 
 # Dev dependencies
 EXTRAS_REQUIRE = {
     "tests": ["pytest>=6.2.5"],
+    "pre-commit": ["pre-commit"],
+    "typing": ["mypy>=0.961"],
 }
 
 EXTRAS_REQUIRE["dev"] = (
-    EXTRAS_REQUIRE["tests"]
+    EXTRAS_REQUIRE["tests"] + EXTRAS_REQUIRE["pre-commit"] + EXTRAS_REQUIRE["typing"]
 )
 
 # Setting up
@@ -33,8 +38,8 @@ setup(
     long_description=long_description,
     package_dir={"": "src"},
     packages=find_packages(where="src"),
-    install_requires=['beautifulsoup4', 'requests'],
-    keywords=['python', 'wikipedia', 'html'],
+    install_requires=["beautifulsoup4", "requests"],
+    keywords=["python", "wikipedia", "html"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",
@@ -47,7 +52,6 @@ setup(
         "Operating System :: Unix",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: Microsoft :: Windows",
-
     ],
     extras_require=EXTRAS_REQUIRE,
     include_package_data=True,

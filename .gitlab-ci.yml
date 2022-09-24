@@ -21,9 +21,9 @@ run_tests:
     image: python:3.8
     before_script:
         - pip install -r requirements.txt
+        - python3 -m pip install pre-commit
     script:
         # - pylint src
         # - flake8 src --statistics --count
+        - pre-commit run --all-files --show-diff-on-failure
         - pytest -v
-
-

@@ -1,4 +1,5 @@
 from bs4 import Comment  # for parsing the HTML
+
 from .const import NAMESPACES
 
 
@@ -64,9 +65,10 @@ def nested_value_extract(key, var):
 
 def title_normalization(link):
     try:
-        # strip everything before the first ":" as a naive way to strip namespace information i.e: "Category" in this case
+        # strip everything before the first ":" as a naive way
+        # to strip namespace information i.e: "Category" in this case
         return link.split(":", 1)[1].replace("_", " ")
-    except Exception as e:
+    except Exception:
         return link
 
 
@@ -74,11 +76,13 @@ def get_namespaces():
     """
     Utility for generating NAMESPACES dictionary found in const.py.
 
-    Not intended to be called from code but to be occasionally run locally and used to manually update NAMESPACES.
+    Not intended to be called from code but to be occasionally
+    run locally and used to manually update NAMESPACES.
     """
     import re
-    import requests
     import time
+
+    import requests
 
     def get_wikipedia_sites():
         session = requests.Session()
@@ -122,7 +126,7 @@ def get_namespaces():
         <lang>-<date>-siteinfo-namespaces.json.gz
         """
         session = requests.Session()
-        base_url = "https://{0}.wikipedia.org/w/api.php".format(lang)
+        base_url = f"https://{lang}.wikipedia.org/w/api.php"
         params = {
             "action": "query",
             "meta": "siteinfo",
@@ -174,7 +178,7 @@ def map_namespace(href, wiki_db) -> int:
         namespace_type = href.split(":")[0].strip("./").replace("_", " ")
         namespace_id = NAMESPACES[wiki_db][namespace_type]
         return namespace_id
-    except Exception as e:
+    except Exception:
         return 0
 
 
@@ -182,12 +186,8 @@ def identify_elements_(tag_string):
     """
     utility function that returns an instance of the identified object
     """
-    from .elements import (
-        Element,
-        Wikilink,
-        Category,
-        ExternalLink,
-    )  # to prevent circular/mutual import
+    from .elements import Category  # to prevent circular/mutual import
+    from .elements import Element, ExternalLink, Wikilink
 
     if is_category(tag_string):
         return Category(tag_string)
@@ -213,7 +213,7 @@ def dfs(
         if hasattr(cnode, "attrs"):  # if node has attributes, check the attributes
             tag_obj = identify_elements_(cnode)
             nested_transclusion = skip_transclusion and tag_obj.transclusion
-            ## don't have to explicitly check for comments
+            # don't have to explicitly check for comments
 
             if nested_transclusion:
                 continue
@@ -230,13 +230,12 @@ def dfs(
                     ) > 0 else tag_obj.title
 
             else:
-                for pt in dfs(
+                yield from dfs(
                     cnode,
                     skip_transclusion=skip_transclusion,
                     skip_categories=skip_categories,
                     skip_headers=skip_headers,
-                ):
-                    yield pt
+                )
         # Raw string -- output
         else:
             yield cnode.text
