@@ -66,7 +66,7 @@ Check out [`example_notebook.ipynb`](docs/tutorials/example_notebook.ipynb) to h
 ```python
     from mwparserfromhtml import Article
     import json
-    article_object = json.load( open( "/home/appledora/Documents/wikimedia/html-dumps/data/article.json" ))
+    article_object = json.load( open( "<PATH-TO-ARTICLE.json>" ))
     article = Article(article_object)
     print("Article Name: ", article.title)
     templates = article.get_templates()
